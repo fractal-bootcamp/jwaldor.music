@@ -9,6 +9,7 @@
   </head>
   <body>
     <div id="root"></div>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
   <head>
@@ -16,112 +17,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Spotify Player</title>
 </head>
-<body>
-    <h1>Spotify Player</h1>
-    <button id="login">Login to Spotify</button>
-    <div class="flex flex-row text-blue-200">
 
-      test
-      <button class="btn btn-circle" id="play-pause">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-      <!-- <button id="play-pause" style="display: none;">Play/Pause</button> -->
-    </div>
-    
-    <div id="player-info" style="display: none;">
-        <h3 id="track-name">Track Name</h3>
-        <p id="artist-name">Artist Name</p>
-        <img id="album-art" src="" alt="Album Art" width="200px">
-    </div>
-
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    <script>
-        const clientId = '2695e07f91b64a2bbc0e4551654a330a';
-        const redirectUri = "http://localhost:5173";
-        let accessToken = '';
-
-        // Login to Spotify
-        document.getElementById('login').addEventListener('click', () => {
-            const scopes = 'user-read-playback-state user-modify-playback-state streaming';
-            const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
-            window.location = authUrl;
-        });
-
-        // Extract the access token from the URL hash
-        window.addEventListener('load', () => {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            accessToken = params.get('access_token');
-
-            if (accessToken) {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('play-pause').style.display = 'grid';
-                document.getElementById('player-info').style.display = 'block';
-
-                initializePlayer();
-            }
-        });
-
-        function initializePlayer() {
-            const player = new Spotify.Player({
-                name: 'Web Playback SDK',
-                getOAuthToken: cb => { cb(accessToken); }
-            });
-
-            // Ready
-            player.addListener('ready', ({ device_id }) => {
-                console.log('Ready with Device ID', device_id);
-                transferPlayback(device_id);
-            });
-
-            // Not Ready
-            player.addListener('not_ready', ({ device_id }) => {
-                console.log('Device ID has gone offline', device_id);
-            });
-
-            // Player state changed
-            player.addListener('player_state_changed', state => {
-                if (!state) {
-                    return;
-                }
-                const currentTrack = state.track_window.current_track;
-                document.getElementById('track-name').innerText = currentTrack.name;
-                document.getElementById('artist-name').innerText = currentTrack.artists[0].name;
-                document.getElementById('album-art').src = currentTrack.album.images[0].url;
-            });
-
-            document.getElementById('play-pause').addEventListener('click', () => {
-                player.togglePlay();
-            });
-
-            player.connect();
-        }
-
-        function transferPlayback(device_id) {
-            fetch('https://api.spotify.com/v1/me/player', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    "device_ids": [device_id],
-                    "play": true,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                },
-            });
-        }
-    </script>
-</body>
 
 </html>
