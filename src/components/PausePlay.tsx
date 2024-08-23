@@ -8,7 +8,7 @@ export default function PausePlay({
   console.log(pauseplay, "pauseplay");
   return (
     <>
-      <div className="justify-self-baseline flex flex-row">
+      <div className="flex flex-row self-center justify-center border border-gray-100 p-3 rounded-xl min-w-48">
         <button>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,11 +76,11 @@ export default function PausePlay({
             />
           </svg>
         </button>
-        <div id="player-info">
-          <h3 id="track-name">Track Name</h3>
-          <p id="artist-name">Artist Name</p>
-          <img id="album-art" src="" alt="Album Art" width="200px" />
-        </div>
+      </div>
+      <div id="player-info">
+        <h3 id="track-name">Track Name</h3>
+        <p id="artist-name">Artist Name</p>
+        <img id="album-art" src="" alt="Album Art" width="200px" />
       </div>
     </>
   );

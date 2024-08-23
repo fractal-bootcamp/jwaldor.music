@@ -120,6 +120,13 @@ function App() {
         <div>
           <h1>Spotify Player</h1>
           <button id="login">Login to Spotify</button>
+          <div className="flex flex-row min-w-[100%] relative left-60 pb-3">
+            <input
+              type="text"
+              placeholder="Search"
+              className="input input-bordered w-full max-w-xs"
+            />
+          </div>
           <div className="flex flex-row text-blue-200">
             <div className="flex flex-col">
               <ul className="menu bg-base-200 rounded-box w-56">
@@ -135,12 +142,7 @@ function App() {
               </ul>
             </div>
             <div className="flex flex-col min-h-screen max-h-screen">
-              <input
-                type="text"
-                placeholder="Search"
-                className="input input-bordered w-full max-w-xs"
-              />
-              <div className="overflow-x-auto min-w-screen">
+              <div className="overflow-x-auto min-w-">
                 <table className="table">
                   {/* head */}
                   <thead>
