@@ -12,7 +12,6 @@ function App() {
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
-  console.log("test222");
   useEffect(() => {
     console.log("useEffect");
     const hash = window.location.hash.substring(1);
@@ -61,6 +60,7 @@ function App() {
     document.body.appendChild(script);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
+      console.log("calling spotify");
       const player = new window.Spotify.Player({
         name: "Web Playback SDK",
         getOAuthToken: (cb) => {
@@ -88,8 +88,15 @@ function App() {
         document.getElementById("track-name").innerText = currentTrack.name;
         document.getElementById("artist-name").innerText =
           currentTrack.artists[0].name;
-        document.getElementById("album-art").src =
-          currentTrack.album.images[0].url;
+        document.getElementById("album-art").src = currentTrack.album.images[0]
+          .url
+          ? currentTrack.album.images[0].url
+          : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
+        console.log(
+          "art ",
+          currentTrack.album.images[0],
+          document.getElementById("album-art")
+        );
       });
 
       // document.getElementById("play-pause").addEventListener("click", () => {
@@ -117,6 +124,7 @@ function App() {
   }
 
   const toggleplay = () => {
+    console.log("toggleplay ", player);
     if (player) {
       if (pauseplay === "play") {
         player.pause();
