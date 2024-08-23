@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import PausePlay from "./components/PausePlay";
+import SpotifyWebApi from "spotify-web-api-js";
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 import "./App.css";
 
@@ -9,6 +11,14 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
   const [pauseplay, setPP] = useState("pause");
+
+  // console.log("process.env.CLIENT_ID", process.env.CLIENT_ID);
+  // Create a new instance of the Spotify API client
+  const spotifyApi = new SpotifyWebApi();
+
+  // clientId: process.env.CLIENT_ID,
+  // clientSecret: "your_client_secret",
+  // redirectUri: "your_redirect_uri",
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
@@ -30,6 +40,8 @@ function App() {
       initializePlayer(access_temp);
     }
     if (document.getElementById("login")) {
+      // const sdk = SpotifyWebApi.withUserAuthorization(clientId, redirectUri);
+      // sdk.
       document.getElementById("login").addEventListener("click", () => {
         const scopes =
           "user-read-playback-state user-modify-playback-state streaming";
@@ -48,58 +60,46 @@ function App() {
   // Login to Spotify
 
   function initializePlayer(access_token: string) {
-    // const player = new Spotify.Player({
+    spotifyApi.setAccessToken(access_token);
+    // new Spotify.Player({
     //   name: "Web Playback SDK",
     //   getOAuthToken: (cb) => {
     //     cb(access_token);
     //   },
     // });
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
 
-    document.body.appendChild(script);
+    // Ready
+    // .player
+    //   .addListener("ready", ({ device_id }) => {
+    //     console.log("Ready with Device ID", device_id);
+    //     transferPlayback(device_id, access_token);
+    //   });
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const player = new window.Spotify.Player({
-        name: "Web Playback SDK",
-        getOAuthToken: (cb) => {
-          cb(access_token);
-        },
-        volume: 0.5,
-      });
-      // Ready
-      player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
-        transferPlayback(device_id, access_token);
-      });
+    // // Not Ready
+    // player.addListener("not_ready", ({ device_id }) => {
+    //   console.log("Device ID has gone offline", device_id);
+    // });
 
-      // Not Ready
-      player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
-      });
+    // Player state changed
+    // player.addListener("player_state_changed", (state) => {
+    //   if (!state) {
+    //     return;
+    //   }
+    //   const currentTrack = state.track_window.current_track;
+    //   document.getElementById("track-name").innerText = currentTrack.name;
+    //   document.getElementById("artist-name").innerText =
+    //     currentTrack.artists[0].name;
+    //   document.getElementById("album-art").src =
+    //     currentTrack.album.images[0].url;
+    // });
 
-      // Player state changed
-      player.addListener("player_state_changed", (state) => {
-        if (!state) {
-          return;
-        }
-        const currentTrack = state.track_window.current_track;
-        document.getElementById("track-name").innerText = currentTrack.name;
-        document.getElementById("artist-name").innerText =
-          currentTrack.artists[0].name;
-        document.getElementById("album-art").src =
-          currentTrack.album.images[0].url;
-      });
+    // document.getElementById("play-pause").addEventListener("click", () => {
+    //   console.log("toggle play");
+    //   player.togglePlay();
+    // });
 
-      // document.getElementById("play-pause").addEventListener("click", () => {
-      //   console.log("toggle play");
-      //   player.togglePlay();
-      // });
-
-      player.connect();
-      setPlayer(player);
-    };
+    // player.connect();
+    // setPlayer(player);
   }
 
   function transferPlayback(device_id, access_token) {
@@ -115,7 +115,6 @@ function App() {
       },
     });
   }
-
   const toggleplay = () => {
     if (player) {
       if (pauseplay === "play") {
@@ -134,8 +133,8 @@ function App() {
           <h3 id="track-name">Track Name</h3>
           <p id="artist-name">Artist Name</p>
           <img id="album-art" src="" alt="Album Art" width="200px" />
-        </div>
-        <h1>Spotify Player</h1> */}
+        </div>  */}
+        <h1>Spotify Player</h1>
         <button id="login">Login to Spotify</button>
         <div className="max-h-full">
           <div className="bg-base-100">
