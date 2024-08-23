@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
+import PausePlay from "./components/PausePlay";
 
 import "./App.css";
 
@@ -16,16 +17,17 @@ function App() {
     console.log("useEffect");
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
-    setAccessToken(params.get("access_token"));
     console.log("TEST");
     console.log("accessToken", accessToken);
     console.log("loaded", params.get("access_token"));
-    if (params.get("access_token")) {
+    const access_temp = params.get("access_token");
+    if (access_temp) {
+      setAccessToken(access_temp);
       document.getElementById("login").style.display = "none";
       document.getElementById("play-pause").style.display = "grid";
       document.getElementById("player-info").style.display = "block";
 
-      initializePlayer(params.get("access_token"));
+      initializePlayer(access_temp);
     }
     if (document.getElementById("login")) {
       document.getElementById("login").addEventListener("click", () => {
@@ -101,100 +103,82 @@ function App() {
       },
     });
   }
-
+  const toggleplay = () => {
+    if (player) {
+      if (pauseplay === "play") {
+        player.pause();
+        setPP("pause");
+      } else if (pauseplay === "pause") {
+        player.resume();
+        setPP("play");
+      }
+    }
+  };
   return (
     <>
       <body>
-        <h1>Spotify Player</h1>
-        <button id="login">Login to Spotify</button>
-        <div className="flex flex-row text-blue-200">
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z"
+        <div>
+          <h1>Spotify Player</h1>
+          <button id="login">Login to Spotify</button>
+          <div className="flex flex-row text-blue-200">
+            <div className="flex flex-col">
+              <ul className="menu bg-base-200 rounded-box w-56">
+                <li>
+                  <a>Item 1</a>
+                </li>
+                <li>
+                  <a>Item 2</a>
+                </li>
+                <li>
+                  <a>Item 3</a>
+                </li>
+              </ul>
+            </div>
+            <div className="flex flex-col min-h-screen max-h-screen">
+              <input
+                type="text"
+                placeholder="Search"
+                className="input input-bordered w-full max-w-xs"
               />
-            </svg>
-          </button>
-
-          <button
-            className="btn btn-circle"
-            id="play-pause"
-            onClick={() => {
-              if (player) {
-                if (pauseplay === "play") {
-                  player.pause();
-                  setPP("pause");
-                } else if (pauseplay === "pause") {
-                  player.resume();
-                  setPP("play");
-                }
-              }
-            }}
-          >
-            {pauseplay === "pause" && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-                />
-              </svg>
-            )}
-            {pauseplay === "play" && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-                />
-              </svg>
-            )}
-          </button>
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div id="player-info">
-          <h3 id="track-name">Track Name</h3>
-          <p id="artist-name">Artist Name</p>
-          <img id="album-art" src="" alt="Album Art" width="200px" />
+              <div className="overflow-x-auto min-w-screen">
+                <table className="table">
+                  {/* head */}
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Job</th>
+                      <th>Favorite Color</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* row 1 */}
+                    <tr>
+                      <th>1</th>
+                      <td>Cy Ganderton</td>
+                      <td>Quality Control Specialist</td>
+                      <td>Blue</td>
+                    </tr>
+                    {/* row 2 */}
+                    <tr>
+                      <th>2</th>
+                      <td>Hart Hagerty</td>
+                      <td>Desktop Support Technician</td>
+                      <td>Purple</td>
+                    </tr>
+                    {/* row 3 */}
+                    <tr>
+                      <th>3</th>
+                      <td>Brice Swyre</td>
+                      <td>Tax Accountant</td>
+                      <td>Red</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <PausePlay toggleplay={toggleplay} pauseplay={pauseplay} />
+            </div>
+          </div>
         </div>
       </body>
     </>
