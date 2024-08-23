@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import PausePlay from "./components/PausePlay";
+import SpotifyWebApi from "spotify-web-api-js";
 
 import "./App.css";
 
@@ -9,6 +10,14 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
   const [pauseplay, setPP] = useState("pause");
+
+  // console.log("process.env.CLIENT_ID", process.env.CLIENT_ID);
+  // Create a new instance of the Spotify API client
+  const spotifyApi = new SpotifyWebApi();
+
+  // clientId: process.env.CLIENT_ID,
+  // clientSecret: "your_client_secret",
+  // redirectUri: "your_redirect_uri",
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
@@ -30,6 +39,8 @@ function App() {
       initializePlayer(access_temp);
     }
     if (document.getElementById("login")) {
+      // const sdk = SpotifyWebApi.withUserAuthorization(clientId, redirectUri);
+      // sdk.
       document.getElementById("login").addEventListener("click", () => {
         const scopes =
           "user-read-playback-state user-modify-playback-state streaming";
@@ -47,15 +58,14 @@ function App() {
   }, []);
   // Login to Spotify
 
-  useEffect(() => {}, []);
-
   function initializePlayer(access_token: string) {
-    const player = new Spotify.Player({
-      name: "Web Playback SDK",
-      getOAuthToken: (cb) => {
-        cb(access_token);
-      },
-    });
+    const player = spotifyApi.setAccessToken(access_token);
+    // new Spotify.Player({
+    //   name: "Web Playback SDK",
+    //   getOAuthToken: (cb) => {
+    //     cb(access_token);
+    //   },
+    // });
 
     // Ready
     player.addListener("ready", ({ device_id }) => {
@@ -86,8 +96,8 @@ function App() {
     //   player.togglePlay();
     // });
 
-    player.connect();
-    setPlayer(player);
+    // player.connect();
+    // setPlayer(player);
   }
 
   function transferPlayback(device_id, access_token) {
@@ -117,14 +127,14 @@ function App() {
   return (
     <>
       <body>
+        {/* <div id="player-info">
+          <h3 id="track-name">Track Name</h3>
+          <p id="artist-name">Artist Name</p>
+          <img id="album-art" src="" alt="Album Art" width="200px" />
+        </div>  */}
+        <h1>Spotify Player</h1>
+        <button id="login">Login to Spotify</button>
         <div className="max-h-full">
-          {/* <div id="player-info">
-            <h3 id="track-name">Track Name</h3>
-            <p id="artist-name">Artist Name</p>
-            <img id="album-art" src="" alt="Album Art" width="200px" />
-          </div>
-          <h1>Spotify Player</h1>
-          <button id="login">Login to Spotify</button> */}
           <div className="bg-base-100">
             <div className="flex flex-row">
               <a className="btn btn-ghost text-xl">Tidal</a>
@@ -171,7 +181,7 @@ function App() {
           </div>
           <div className="flex flex-row text-blue-200">
             {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
-            <ul className="menu  w-56 rounded-l-none rounded-br-none mt-3 border border-zinc-300 border-l-0 rounded-tr-lg">
+            <ul className="menu  w-48 rounded-l-none rounded-br-none mt-3 border border-zinc-300 border-l-0 rounded-tr-lg">
               <li className="menu-title font-light">Playlists</li>
               <li className="font-light">
                 <a>Item 1</a>

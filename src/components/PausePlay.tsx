@@ -8,7 +8,28 @@ export default function PausePlay({
   console.log(pauseplay, "pauseplay");
   return (
     <>
-      <div className="flex flex-row m-auto justify-center">
+      <div className="flex flex-row m-auto justify-center place-items-center">
+        <div id="player-info" className="w-24 mr-16 mb-3 self-center">
+          {/*  <h3 id="track-name">Track Name</h3>  */}
+          {/* <p id="artist-name">Artist Name</p> */}
+          <div className="card-compact  bg-base-100 w-36 shadow-xl">
+            <div className="card-body">
+              <h2
+                id="track-name"
+                className="card-title static text-lg text-center"
+              >
+                Track Name
+              </h2>
+              <p id="artist-name" className="text-sm text-center">
+                Artist Name
+              </p>
+            </div>
+            <figure>
+              <img id="album-art" src="" alt="Album Art" width="200px" />
+            </figure>
+          </div>
+          {/* <img id="album-art" src="" alt="Album Art" width="200px" /> */}
+        </div>
         <div className="flex flex-row mt-auto mb-3 justify-self-center justify-center border border-gray-100 p-3 rounded-xl w-[30%]">
           <button>
             <svg
