@@ -1,14 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import PausePlay from "./components/PausePlay";
+import WebPlayback from "./components/WebPlayerSpotify";
 
 import "./App.css";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
-  const [pauseplay, setPP] = useState("pause");
+  const playerRef = useRef(undefined);
+  const [pauseplay, setPP] = useState("play");
+  const [is_active, setActive] = useState(false);
+  const [setupDone, setSetupDone] = useState(false);
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
@@ -38,10 +43,13 @@ function App() {
         window.location = authUrl;
       });
     }
-
-    // Extract the access token from the URL hash
-    // window.addEventListener("load", () => {
-
+    return () => {
+      if (player) {
+        player.removeListener("ready");
+        player.removeListener("not_ready");
+        player.removeListener("player_state_changed");
+      }
+    };
     // });
   }, []);
   // Login to Spotify
@@ -59,57 +67,93 @@ function App() {
 
     document.body.appendChild(script);
 
+    const songSetup = (state) => {
+      // if (player.state)
+      const currentTrack = state.track_window.current_track;
+      document.getElementById("track-name").innerText = currentTrack.name;
+      document.getElementById("artist-name").innerText =
+        currentTrack.artists[0].name;
+      document.getElementById("album-art").src = currentTrack.album.images[0]
+        .url
+        ? currentTrack.album.images[0].url
+        : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
+      console.log("songSetup ");
+    };
+    // if (localStorage["device_id"]) {
+    //   transferPlayback(device_id, access_token);
+    // }
     window.onSpotifyWebPlaybackSDKReady = () => {
-      console.log("calling spotify");
-      const player = new window.Spotify.Player({
-        name: "Web Playback SDK",
-        getOAuthToken: (cb) => {
-          cb(access_token);
-        },
-        volume: 0.5,
-      });
-      // Ready
-      player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
-        transferPlayback(device_id, access_token);
-      });
-
-      // Not Ready
-      player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
-      });
-
-      // Player state changed
-      player.addListener("player_state_changed", (state) => {
-        if (!state) {
-          return;
+      if (!playerRef.current) {
+        console.log("calling spotify");
+        const player = new window.Spotify.Player({
+          name: "Web Playback SDK",
+          getOAuthToken: (cb) => {
+            cb(access_token);
+          },
+          volume: 0.5,
+        });
+        if (!player) {
+          console.log("player initializatin failed");
         }
-        const currentTrack = state.track_window.current_track;
-        document.getElementById("track-name").innerText = currentTrack.name;
-        document.getElementById("artist-name").innerText =
-          currentTrack.artists[0].name;
-        document.getElementById("album-art").src = currentTrack.album.images[0]
-          .url
-          ? currentTrack.album.images[0].url
-          : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
-        console.log(
-          "art ",
-          currentTrack.album.images[0],
-          document.getElementById("album-art")
-        );
-      });
+        // Ready
+        player.addListener("ready", ({ device_id }) => {
+          console.log("Ready with Device ID", device_id);
+          localStorage["device_id"] = device_id;
+          transferPlayback(device_id, access_token);
+        });
 
-      // document.getElementById("play-pause").addEventListener("click", () => {
-      //   console.log("toggle play");
-      //   player.togglePlay();
-      // });
+        // Not Ready
+        player.addListener("not_ready", ({ device_id }) => {
+          console.log("Device ID has gone offline", device_id);
+        });
 
-      player.connect();
-      setPlayer(player);
+        // Player state changed
+        player.addListener("player_state_changed", (state) => {
+          if (!state) {
+            return;
+          }
+          console.log("curr_state", player.getCurrentState());
+          player.getCurrentState().then((state) => {
+            !state ? setActive(false) : setActive(true);
+            // player.pause();
+          });
+
+          songSetup(state);
+        });
+
+        // Extract the access token from the URL hash
+        // window.addEventListener("load", () => {
+        player.on("initialization_error", ({ message }) => {
+          console.error("Failed to initialize", message);
+        });
+        player.on("authentication_error", ({ message }) => {
+          console.error("Failed to authenticate", message);
+        });
+        player.on("account_error", ({ message }) => {
+          console.error("Failed to validate Spotify account", message);
+        });
+        player.on("playback_error", ({ message }) => {
+          console.error("Failed to perform playback", message);
+        });
+
+        // document.getElementById("play-pause").addEventListener("click", () => {
+        //   console.log("toggle play");
+        //   player.togglePlay();
+        // });
+
+        player.connect();
+        console.log("set player");
+        setPlayer(player);
+        playerRef.current = player;
+        console.log("player set");
+      }
+
+      // songSetup(player.getCurrentState());
     };
   }
 
   function transferPlayback(device_id, access_token) {
+    console.log("access_token", access_token);
     fetch("https://api.spotify.com/v1/me/player", {
       method: "PUT",
       body: JSON.stringify({
@@ -126,10 +170,13 @@ function App() {
   const toggleplay = () => {
     console.log("toggleplay ", player);
     if (player) {
+      console.log("if accepted", "pauseplay", pauseplay);
       if (pauseplay === "play") {
+        console.log("pausing");
         player.pause();
         setPP("pause");
       } else if (pauseplay === "pause") {
+        console.log("playing");
         player.resume();
         setPP("play");
       }
@@ -144,6 +191,7 @@ function App() {
           <img id="album-art" src="" alt="Album Art" width="200px" />
         </div>
         <h1>Spotify Player</h1> */}
+
         <button id="login">Login to Spotify</button>
         <div className="max-h-full">
           <div className="bg-base-100">
@@ -247,6 +295,24 @@ function App() {
             </div>
           </div>
           <PausePlay toggleplay={toggleplay} pauseplay={pauseplay} />
+          {!is_active && (
+            <div className="container">
+              <div className="main-wrapper">
+                <b>
+                  {" "}
+                  Instance not active. Transfer your playback using your Spotify
+                  app{" "}
+                </b>
+              </div>
+            </div>
+          )}
+          {is_active && (
+            <div className="container">
+              <div className="main-wrapper">
+                <b> Active!</b>
+              </div>
+            </div>
+          )}
         </div>
       </body>
     </>

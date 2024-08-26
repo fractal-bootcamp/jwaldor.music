@@ -1,5 +1,7 @@
 import { motion, animate, useAnimationControls } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useControls } from "leva";
+import { bezier } from "@leva-ui/plugin-bezier";
 
 export default function PausePlay({
   toggleplay,
@@ -10,6 +12,11 @@ export default function PausePlay({
 }) {
   const [showTitle, setShowTitle] = useState(false);
   const [mouseHover, setMouseHover] = useState(false);
+  const { aNumber, aColor, curve } = useControls({
+    aNumber: 1,
+    aColor: "#FFF",
+    curve: bezier(),
+  });
 
   const controls = useAnimationControls();
 
@@ -74,16 +81,16 @@ export default function PausePlay({
             onMouseEnter={() => {
               const box = document.getElementById("player-info");
               // setShowTitle(true);
-              animate(box, {
-                scale: 2,
-                y: -110,
-                transition: { ease: "easeIn" },
-              });
+              // animate(box, {
+              //   scale: 2,
+              //   y: -110,
+              //   transition: { ease: "easeIn" },
+              // });
               controls
                 .start({
                   scale: 1.7,
                   y: -70,
-                  transition: { ease: "linear", type: "spring", duration: 1 },
+                  transition: { ease: curve, duration: 0 },
                 })
                 .then((res) => {
                   // if (mouseHover) {
@@ -93,7 +100,7 @@ export default function PausePlay({
             }}
             onMouseLeave={() => {
               setShowTitle(false);
-              console.log("setshowtitle false");
+              // console.log("setshowtitle false");
               controls
                 .start({
                   scale: 1,
