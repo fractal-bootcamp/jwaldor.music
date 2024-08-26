@@ -182,6 +182,20 @@ function App() {
       }
     }
   };
+  const nextSong = () => {
+    // console.log("toggleplay ", player);
+    if (player) {
+      console.log("next song");
+      player.nextTrack();
+    }
+  };
+  const prevSong = () => {
+    // console.log("toggleplay ", player);
+    if (player) {
+      console.log("previous song");
+      player.previousTrack();
+    }
+  };
   return (
     <>
       <body>
@@ -192,12 +206,12 @@ function App() {
         </div>
         <h1>Spotify Player</h1> */}
 
-        <button id="login">Login to Spotify</button>
-        <div className="max-h-full">
+        <div className="max-h-screen min-h-screen">
+          <button id="login">Login to Spotify</button>
           <div className="bg-base-100">
             <div className="flex flex-row">
               <a className="btn btn-ghost text-xl">Tidal</a>
-              <div className="form-control w-[50%] ml-auto mr-60 mb-5">
+              <div className="form-control w-[50%] ml-auto mb-5">
                 <input
                   type="text"
                   placeholder="Search"
@@ -250,7 +264,7 @@ function App() {
               </li>
             </ul>
             {/* </div> */}
-            <div className="flex flex-col w-full min-h-screen max-h-screen">
+            <div className="flex flex-col w-full">
               {/* <div className="flex flex-row min-w-screen relative pb-3 ml-2 mt-4">
                 <input
                   type="text"
@@ -294,8 +308,13 @@ function App() {
               </div>
             </div>
           </div>
-          <PausePlay toggleplay={toggleplay} pauseplay={pauseplay} />
-          {!is_active && (
+          <PausePlay
+            toggleplay={toggleplay}
+            pauseplay={pauseplay}
+            prevSong={prevSong}
+            nextSong={nextSong}
+          />
+          {/* {!is_active && (
             <div className="container">
               <div className="main-wrapper">
                 <b>
@@ -312,7 +331,7 @@ function App() {
                 <b> Active!</b>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </body>
     </>

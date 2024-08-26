@@ -6,9 +6,13 @@ import { bezier } from "@leva-ui/plugin-bezier";
 export default function PausePlay({
   toggleplay,
   pauseplay,
+  prevSong,
+  nextSong,
 }: {
   toggleplay: Function;
   pauseplay: string;
+  prevSong: Function;
+  nextSong: Function;
 }) {
   const [showTitle, setShowTitle] = useState(false);
   const [mouseHover, setMouseHover] = useState(false);
@@ -29,10 +33,11 @@ export default function PausePlay({
   //   });
   // }, []);
 
+  // bg-base-200 border-s border-e border-t border-b border-gray-100
   return (
     <>
-      <div className="flex flex-row m-auto justify-center place-items-center">
-        <div className="flex flex-col justify-center w-48">
+      <div className="flex flex-row justify-center relative bottom-0">
+        <div className="flex flex-col justify-center w-full">
           {/* <div className="card-body"></div> */}
           <motion.div
             // whileHover={{
@@ -44,7 +49,7 @@ export default function PausePlay({
             id="player-info"
             className="mb-3 w-24 self-center"
           >
-            <div>
+            {/* <div>
               <div
                 id="track-name"
                 className={
@@ -61,7 +66,7 @@ export default function PausePlay({
               >
                 Artist Name
               </div>
-            </div>
+            </div> */}
             {/*  <h3 id="track-name">Track Name</h3>  */}
             {/* <p id="artist-name">Artist Name</p> */}
             <div className="card-compact  bg-base-100 shadow-xl">
@@ -77,7 +82,7 @@ export default function PausePlay({
             {/* <img id="album-art" src="" alt="Album Art" width="200px" /> */}
           </motion.div>
           <div
-            className="flex flex-row mb-3 justify-center border border-gray-100 p-3 rounded-xl w-fill"
+            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-200"
             onMouseEnter={() => {
               const box = document.getElementById("player-info");
               // setShowTitle(true);
@@ -110,77 +115,88 @@ export default function PausePlay({
                 .then((res) => setShowTitle(false));
             }}
           >
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z"
-                />
-              </svg>
-            </button>
-
-            <button
-              className="btn btn-circle"
-              id="play-pause"
-              onClick={toggleplay}
-            >
-              {pauseplay === "pause" && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  className="size-6"
+            <div className="flex flex-col items-center w-1/2">
+              <div className="mb-1">
+                <div id="track-name" className={"text-xs text-center"}>
+                  Track Name
+                </div>
+                <div id="artist-name" className={"text-xs text-center"}>
+                  Artist Name
+                </div>
+              </div>
+              <div className="flex flex-row w-full justify-center">
+                <button onClick={prevSong}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  className="btn btn-circle mx-24"
+                  id="play-pause"
+                  onClick={toggleplay}
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-                  />
-                </svg>
-              )}
-              {pauseplay === "play" && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-                  />
-                </svg>
-              )}
-            </button>
-            <button>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"
-                />
-              </svg>
-            </button>
+                  {pauseplay === "pause" && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
+                      />
+                    </svg>
+                  )}
+                  {pauseplay === "play" && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+                      />
+                    </svg>
+                  )}
+                </button>
+                <button onClick={nextSong}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
           {/* <div>
             <div id="track-name" className="text-sm text-center">
