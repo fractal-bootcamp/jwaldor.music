@@ -36,7 +36,7 @@ export default function PausePlay({
   // bg-base-200 border-s border-e border-t border-b border-gray-100
   return (
     <>
-      <div className="flex flex-row justify-center">
+      <div className="flex flex-row justify-center mt-auto">
         <div className="flex flex-col justify-center w-full">
           {/* <div className="card-body"></div> */}
           <motion.div
