@@ -82,7 +82,7 @@ export default function PausePlay({
             {/* <img id="album-art" src="" alt="Album Art" width="200px" /> */}
           </motion.div>
           <div
-            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-200"
+            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-300"
             onMouseEnter={() => {
               const box = document.getElementById("player-info");
               // setShowTitle(true);
