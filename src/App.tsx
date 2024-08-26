@@ -204,94 +204,137 @@ function App() {
           <img id="album-art" src="" alt="Album Art" width="200px" />
         </div>
         <h1>Spotify Player</h1> */}
+      {/*
+        <ul className="menu w-[20%] rounded-l-none rounded-br-none rounded-tr-lg bg-base-300">
+          <li className="menu-title font-light">Recommended</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+          <li className="menu-title font-light">More</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+          <li className="menu-title font-light">More</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+        </ul> */}
+      <div className="flex flex-col max-h-screen min-h-screen">
+        <div className="flex flex-row"></div>
 
-      <div className="min-h-screen flex flex-col">
-        <button id="login">Login to Spotify</button>
-        <div className="flex-grow">
-          <div className="bg-base-100">
-            <div className="flex flex-row">
-              <a className="btn btn-ghost text-xl">Tidal</a>
-              <div className="form-control w-[50%] ml-auto mb-5">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="input input-bordered w-24 md:w-auto"
-                />
-              </div>
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="Tailwind CSS Navbar component"
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                    />
-                  </div>
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-                >
-                  <li>
-                    <a className="justify-between">
-                      Profile
-                      <span className="badge">New</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a>Settings</a>
-                  </li>
-                  <li>
-                    <a>Logout</a>
-                  </li>
-                </ul>
+        <div className="flex flex-row max-w-fit">
+          <div className="flex flex-col">
+            <div className="">
+              <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
+                <a className="btn btn-ghost text-xl">Tidal</a>
               </div>
             </div>
-            <div className="flex-none gap-2"></div>
-          </div>
-          <div className="flex flex-row text-blue-200">
-            {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
-            <ul className="menu w-[20%] rounded-l-none rounded-br-none mt-3 border border-zinc-300 border-l-0 rounded-tr-lg">
+            <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
               <li className="menu-title font-light">Recommended</li>
               <li className="font-light">
-                <a>Item 1</a>
+                <a>Higher Love</a>
               </li>
               <li className="font-light">
-                <a>Item 2</a>
+                <a>Purple Lamborghini</a>
+              </li>
+              <li className="menu-title font-light">More</li>
+              <li className="font-light">
+                <a>Higher Love</a>
+              </li>
+              <li className="font-light">
+                <a>Purple Lamborghini</a>
+              </li>
+              <li className="menu-title font-light">More</li>
+              <li className="font-light">
+                <a>Higher Love</a>
+              </li>
+              <li className="font-light">
+                <a>Purple Lamborghini</a>
               </li>
             </ul>
-            {/* </div> */}
-            <div className="flex flex-col">
-              {/* <div className="flex flex-row min-w-screen relative pb-3 ml-2 mt-4">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="input input-bordered w-full max-w-xs"
-                />
-              </div> */}
+          </div>
+
+          <div className="max-h-screen">
+            <button id="login">Login to Spotify</button>
+            <div className="flex-grow">
               <div className="">
-                <table className="table-sm">
-                  {/* head */}
-                  <thead className="font-light">
-                    <tr>
-                      <th></th>
-                      <th className="font-light text-neutral-400">Title</th>
-                      <th className="font-light text-neutral-400">Artist</th>
-                      <th className="font-light text-neutral-400">Album</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* row 1 */}
-                    <tr className="text-neutral-300">
-                      <th>1</th>
-                      <td>Cy Ganderton</td>
-                      <td>Quality Control Specialist</td>
-                      <td>Blue</td>
-                    </tr>
-                    {/* <tr>
+                <div className="flex-none gap-2"></div>
+              </div>
+              <div className="flex flex-row text-blue-200">
+                {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
+                {/* </div> */}
+                <div className="flex flex-col">
+                  <div className="flex">
+                    <div className="form-control ml-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        className="input input-bordered max-w-[80%]"
+                      />
+                    </div>
+
+                    <div className="dropdown dropdown-end">
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        className="btn btn-ghost btn-circle avatar"
+                      >
+                        <div className="w-10 rounded-full">
+                          <img
+                            alt="Tailwind CSS Navbar component"
+                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                          />
+                        </div>
+                      </div>
+                      <ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                      >
+                        <li>
+                          <a className="justify-between">
+                            Profile
+                            <span className="badge">New</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a>Settings</a>
+                        </li>
+                        <li>
+                          <a>Logout</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="">
+                    <table className="table-sm">
+                      {/* head */}
+                      <thead className="font-light">
+                        <tr>
+                          <th></th>
+                          <th className="font-light text-neutral-400">Title</th>
+                          <th className="font-light text-neutral-400">
+                            Artist
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* row 1 */}
+                        <tr className="text-neutral-300">
+                          <th>1</th>
+                          <td>Cy Ganderton</td>
+                          <td>Quality Control Specialist</td>
+                        </tr>
+                        {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
                       <td>Desktop Support Technician</td>
@@ -303,19 +346,14 @@ function App() {
                       <td>Tax Accountant</td>
                       <td>Red</td>
                     </tr> */}
-                  </tbody>
-                </table>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <PausePlay
-          toggleplay={toggleplay}
-          pauseplay={pauseplay}
-          prevSong={prevSong}
-          nextSong={nextSong}
-        />
-        {/* {!is_active && (
+          {/* {!is_active && (
             <div className="container">
               <div className="main-wrapper">
                 <b>
@@ -333,6 +371,13 @@ function App() {
               </div>
             </div>
           )} */}
+        </div>
+        <PausePlay
+          toggleplay={toggleplay}
+          pauseplay={pauseplay}
+          prevSong={prevSong}
+          nextSong={nextSong}
+        />
       </div>
     </>
   );
