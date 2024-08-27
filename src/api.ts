@@ -3,6 +3,7 @@ export type SpotifyServiceOptions = {
   getTop: Function;
   getMe: Function;
   getRecs: Function;
+  saveTrack: Function;
 };
 
 export const SpotifyServices = (access_token: string) => {
@@ -36,14 +37,19 @@ export const SpotifyServices = (access_token: string) => {
           Authorization: `Bearer ${access_token}`,
         },
       }),
-    getRecs: (id: string) =>
-      fetch(`https://api.spotify.com/v1/recommendations?seed_tracks=${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`,
-        },
-      }),
+    getRecs: (id: Array<string>) =>
+      fetch(
+        `https://api.spotify.com/v1/recommendations?seed_tracks=${id.join(
+          ","
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      ),
     saveTrack: (id: string) =>
       fetch(
         `https://api.spotify.com/v1/me/tracks
@@ -55,7 +61,7 @@ export const SpotifyServices = (access_token: string) => {
             Authorization: `Bearer ${access_token}`,
           },
           body: JSON.stringify({
-            ids: id,
+            ids: [id],
           }),
         }
       ),

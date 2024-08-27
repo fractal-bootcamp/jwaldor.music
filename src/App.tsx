@@ -27,6 +27,7 @@ function App() {
   const [songTable, setSongTable] = useState(Array<TrackType>);
   const [recList, setRecList] = useState<Array<TrackType>>();
   const [topItems, setTopItems] = useState(Array<TrackType>);
+  const [recentlySaved, setRecentlySaved] = useState<Array<string>>([]);
   // const [topItems, setTopItems] = useState(
   //   Array<{ name: string; artists: Array<Object>; uri: string }>
   // );
@@ -42,6 +43,18 @@ function App() {
     setApiServices(SpotifyServices(accessToken));
     console.log("set Api services");
   }, [accessToken]);
+
+  const save_song: MouseEventHandler<HTMLButtonElement> = () => {
+    console.log("called");
+    if (playerState && apiServices) {
+      const current_id = playerState.track_window.current_track.id;
+      console.log("saving song");
+      apiServices.saveTrack(current_id);
+      setRecentlySaved([...recentlySaved, current_id]);
+    } else {
+      console.error("save_song failed stuff not defined");
+    }
+  };
 
   const songSetup = () => {
     // if (player.state)
@@ -69,10 +82,10 @@ function App() {
         playerState.track_window.current_track.id,
         apiServices
       );
-      if (apiServices) {
+      if (apiServices && recentlySaved.length > 0) {
         console.log("calling API");
         apiServices
-          .getRecs(playerState.track_window.current_track.id)
+          .getRecs(recentlySaved)
           .then((res) => res.json())
           .then((res) => setRecList(res.tracks.slice(0, 5)));
         // .then((res) => console.log(res.values()));
@@ -84,8 +97,9 @@ function App() {
       // setPP(playerState.paused ? "play" : "pause");
     }
     songSetup();
-    refreshRecommendations();
   }, [playerState]);
+
+  useEffect(() => refreshRecommendations(), [recentlySaved]);
 
   useEffect(() => {
     console.log("apiservices changed");
@@ -337,10 +351,10 @@ function App() {
             </div>
             <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
               <li className="menu-title font-light">
-                Recommendations based on current song
+                Recommendations based on recently saved
               </li>
 
-              {recList.map((item) => (
+              {(recList ? recList : []).map((item) => (
                 <li className="font-light">
                   <a>
                     <div>
@@ -399,7 +413,7 @@ function App() {
                 id="login"
                 onClick={() => {
                   const scopes =
-                    "user-read-playback-state user-modify-playback-state streaming user-top-read user-read-private user-read-email";
+                    "user-read-playback-state user-modify-playback-state streaming user-top-read user-read-private user-read-email user-library-modify";
                   const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
                     redirectUri
                   )}&scope=${encodeURIComponent(
@@ -579,6 +593,7 @@ function App() {
           name={currentsonginfo ? currentsonginfo.name : undefined}
           artists={currentsonginfo ? currentsonginfo.artists : undefined}
           album_art={currentsonginfo ? currentsonginfo.album_art : undefined}
+          save_song={save_song}
         />
       </div>
       {/* </div> */}
