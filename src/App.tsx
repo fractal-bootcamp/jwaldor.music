@@ -7,14 +7,16 @@ import { MouseEventHandler } from "react";
 
 import "./App.css";
 
+type TrackType = {
+  name: string | undefined;
+  artists: Array<{ name: string }> | undefined;
+  album_art: string | undefined;
+};
+
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
-  const [currentsonginfo, setCurrentSongInfo] = useState<{
-    name: string | undefined;
-    artists: Array<{ name: string }> | undefined;
-    album_art: string | undefined;
-  }>();
+  const [currentsonginfo, setCurrentSongInfo] = useState<TrackType>();
   const playerRef = useRef(undefined);
   const [pauseplay, setPP] = useState("play");
   const [searchVal, setSearchVal] = useState("");
@@ -24,6 +26,7 @@ function App() {
   const [songTable, setSongTable] = useState(
     Array<{ name: string; artists: Array<Object>; uri: string }>
   );
+  const [topItems, setTopItems] = useState(Array<TrackType>);
   // const [topItems, setTopItems] = useState(
   //   Array<{ name: string; artists: Array<Object>; uri: string }>
   // );
@@ -42,7 +45,15 @@ function App() {
     if (apiServices) {
       console.log(apiServices);
       console.log(apiServices.getTop);
+      apiServices
+        .getTop()
+        .then((res) => res.json())
+        .then((res) => {
+          setTopItems(res.items);
+          setSongTable(res.items.slice(0, 5));
+        });
       // setTopItems(apiServices.getTop());
+      // apiServices.getMe().then((res) => console.log("getme", res));
     }
   }, [apiServices]);
 
@@ -114,6 +125,14 @@ function App() {
     (window as any).onSpotifyWebPlaybackSDKReady = () => {
       if (!playerRef.current) {
         console.log("calling spotify");
+        // const user = new (window as any).Spotify.Users({
+        //   name: "Web Playback SDK",
+        //   getOAuthToken: (cb: Function) => {
+        //     cb(access_token);
+        //   },
+        //   volume: 0.5,
+        // });
+        // console.log("user", user);
         const player = new (window as any).Spotify.Player({
           name: "Web Playback SDK",
           getOAuthToken: (cb: Function) => {
@@ -343,10 +362,12 @@ function App() {
                 id="login"
                 onClick={() => {
                   const scopes =
-                    "user-read-playback-state user-modify-playback-state streaming user-top-read";
+                    "user-read-playback-state user-modify-playback-state streaming user-top-read user-read-private user-read-email";
                   const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
                     redirectUri
-                  )}&scope=${encodeURIComponent(scopes)}`;
+                  )}&scope=${encodeURIComponent(
+                    scopes
+                  )}&grant_type=authorization_code`;
                   (window as any).location = authUrl;
                 }}
               >
