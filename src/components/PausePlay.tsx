@@ -19,7 +19,7 @@ export default function PausePlay({
   name: string | undefined;
   artists: Array<{ name: string }> | undefined;
   album_art: string | undefined;
-  save_song: Function;
+  save_song: MouseEventHandler<HTMLButtonElement>;
 }) {
   // const [showTitle, setShowTitle] = useState(false);
   // const [mouseHover, setMouseHover] = useState(false);
@@ -208,7 +208,7 @@ export default function PausePlay({
                 </button>
               </div>
             </div>
-            <button>
+            <button onClick={save_song}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
