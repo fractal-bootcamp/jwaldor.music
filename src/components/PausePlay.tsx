@@ -1,5 +1,5 @@
 import { motion, animate, useAnimationControls } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
 import { useControls } from "leva";
 import { bezier } from "@leva-ui/plugin-bezier";
 
@@ -8,11 +8,17 @@ export default function PausePlay({
   pauseplay,
   prevSong,
   nextSong,
+  name,
+  artists,
+  album_art,
 }: {
-  toggleplay: Function;
+  toggleplay: MouseEventHandler<HTMLButtonElement>;
   pauseplay: string;
-  prevSong: Function;
-  nextSong: Function;
+  prevSong: MouseEventHandler<HTMLButtonElement>;
+  nextSong: MouseEventHandler<HTMLButtonElement>;
+  name: string | undefined;
+  artists: Array<{ name: string }> | undefined;
+  album_art: string | undefined;
 }) {
   const [showTitle, setShowTitle] = useState(false);
   const [mouseHover, setMouseHover] = useState(false);
@@ -21,6 +27,7 @@ export default function PausePlay({
     aColor: "#FFF",
     curve: bezier(),
   });
+  console.log("album_art", album_art);
 
   const controls = useAnimationControls();
 
@@ -73,7 +80,11 @@ export default function PausePlay({
               <figure>
                 <img
                   id="album-art"
-                  src="https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg"
+                  src={
+                    album_art
+                      ? album_art
+                      : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg"
+                  }
                   alt="Album Art"
                   width="200px"
                 />
@@ -118,10 +129,12 @@ export default function PausePlay({
             <div className="flex flex-col items-center w-1/2">
               <div className="mb-1">
                 <div id="track-name" className={"text-xs text-center"}>
-                  Track Name
+                  {name ? name : "Track Name"}
                 </div>
                 <div id="artist-name" className={"text-xs text-center"}>
-                  Artist Name
+                  {artists
+                    ? artists.map((artist) => artist.name).join(", ")
+                    : "Artist Name"}
                 </div>
               </div>
               <div className="flex flex-row w-full justify-center">

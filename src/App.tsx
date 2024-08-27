@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import PausePlay from "./components/PausePlay";
-import WebPlayback from "./components/WebPlayerSpotify";
+// import WebPlayback from "./components/WebPlayerSpotify";
 import { SpotifyServices, SpotifyServiceOptions } from "./api";
+import { MouseEventHandler } from "react";
 
 import "./App.css";
 import { access } from "fs";
@@ -12,6 +13,11 @@ import { access } from "fs";
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
+  const [currentsonginfo, setCurrentSongInfo] = useState<{
+    name: string | undefined;
+    artists: Array<{ name: string }> | undefined;
+    album_art: string | undefined;
+  }>();
   const playerRef = useRef(undefined);
   const [pauseplay, setPP] = useState("play");
   const [searchVal, setSearchVal] = useState("");
@@ -21,9 +27,11 @@ function App() {
   const [songTable, setSongTable] = useState(
     Array<{ name: string; artists: Array<Object>; uri: string }>
   );
+  // const [topItems, setTopItems] = useState(
+  //   Array<{ name: string; artists: Array<Object>; uri: string }>
+  // );
 
-  const [is_active, setActive] = useState(false);
-  const [setupDone, setSetupDone] = useState(false);
+  // const [is_active, setActive] = useState(false);
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
@@ -31,6 +39,14 @@ function App() {
   // function seekSong()
 
   useEffect(() => setApiServices(SpotifyServices(accessToken)), [accessToken]);
+
+  useEffect(() => {
+    if (apiServices) {
+      console.log(apiServices);
+      console.log(apiServices.getTop);
+      // setTopItems(apiServices.getTop());
+    }
+  }, [apiServices]);
 
   useEffect(() => {
     console.log("useEffect");
@@ -42,29 +58,19 @@ function App() {
     const access_temp = params.get("access_token");
     if (access_temp) {
       setAccessToken(access_temp);
-      document.getElementById("login").style.display = "none";
-      document.getElementById("play-pause").style.display = "grid";
-      document.getElementById("player-info").style.display = "block";
+      // document.getElementById("login").style.display = "none";
+      // document.getElementById("play-pause").style.display = "grid";
+      // document.getElementById("player-info").style.display = "block";
 
       initializePlayer(access_temp);
     }
-    if (document.getElementById("login")) {
-      document.getElementById("login").addEventListener("click", () => {
-        const scopes =
-          "user-read-playback-state user-modify-playback-state streaming";
-        const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
-          redirectUri
-        )}&scope=${encodeURIComponent(scopes)}`;
-        window.location = authUrl;
-      });
-    }
-    return () => {
-      if (player) {
-        player.removeListener("ready");
-        player.removeListener("not_ready");
-        player.removeListener("player_state_changed");
-      }
-    };
+    // return () => {
+    //   if (player) {
+    //     player.removeListener("ready");
+    //     player.removeListener("not_ready");
+    //     player.removeListener("player_state_changed");
+    //   }
+    // };
     // });
   }, []);
   // Login to Spotify
@@ -82,27 +88,37 @@ function App() {
 
     document.body.appendChild(script);
 
-    const songSetup = (state) => {
+    const songSetup = (state: any) => {
       // if (player.state)
       const currentTrack = state.track_window.current_track;
-      document.getElementById("track-name").innerText = currentTrack.name;
-      document.getElementById("artist-name").innerText =
-        currentTrack.artists[0].name;
-      document.getElementById("album-art").src = currentTrack.album.images[0]
-        .url
-        ? currentTrack.album.images[0].url
-        : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
+      setCurrentSongInfo({
+        name: currentTrack.name,
+        artists: currentTrack.artists,
+        album_art: currentTrack.album.images[0],
+      });
+      // document.getElementById("track-name").innerText = currentTrack.name;
+      // document.getElementById("artist-name").innerText =
+      //   currentTrack.artists[0].name;
+      // document.getElementById("album-art").src = currentTrack.album.images[0]
+      //   .url
+      //   ? currentTrack.album.images[0].url
+      //   : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
+      setCurrentSongInfo({
+        name: currentTrack.name,
+        artists: currentTrack.artists,
+        album_art: currentTrack.album.images[0].url,
+      });
       console.log("songSetup ");
     };
     // if (localStorage["device_id"]) {
     //   transferPlayback(device_id, access_token);
     // }
-    window.onSpotifyWebPlaybackSDKReady = () => {
+    (window as any).onSpotifyWebPlaybackSDKReady = () => {
       if (!playerRef.current) {
         console.log("calling spotify");
-        const player = new window.Spotify.Player({
+        const player = new (window as any).Spotify.Player({
           name: "Web Playback SDK",
-          getOAuthToken: (cb) => {
+          getOAuthToken: (cb: Function) => {
             cb(access_token);
           },
           volume: 0.5,
@@ -111,25 +127,28 @@ function App() {
           console.log("player initializatin failed");
         }
         // Ready
-        player.addListener("ready", ({ device_id }) => {
+        player.addListener("ready", ({ device_id }: { device_id: string }) => {
           console.log("Ready with Device ID", device_id);
           localStorage["device_id"] = device_id;
           transferPlayback(device_id, access_token);
         });
 
         // Not Ready
-        player.addListener("not_ready", ({ device_id }) => {
-          console.log("Device ID has gone offline", device_id);
-        });
+        player.addListener(
+          "not_ready",
+          ({ device_id }: { device_id: string }) => {
+            console.log("Device ID has gone offline", device_id);
+          }
+        );
 
         // Player state changed
-        player.addListener("player_state_changed", (state) => {
+        player.addListener("player_state_changed", (state: Object) => {
           if (!state) {
             return;
           }
           console.log("curr_state", player.getCurrentState());
-          player.getCurrentState().then((state) => {
-            !state ? setActive(false) : setActive(true);
+          player.getCurrentState().then((state: Object) => {
+            // !state ? setActive(false) : setActive(true);
             // player.pause();
           });
 
@@ -138,16 +157,22 @@ function App() {
 
         // Extract the access token from the URL hash
         // window.addEventListener("load", () => {
-        player.on("initialization_error", ({ message }) => {
-          console.error("Failed to initialize", message);
-        });
-        player.on("authentication_error", ({ message }) => {
-          console.error("Failed to authenticate", message);
-        });
-        player.on("account_error", ({ message }) => {
+        player.on(
+          "initialization_error",
+          ({ message }: { message: string }) => {
+            console.error("Failed to initialize", message);
+          }
+        );
+        player.on(
+          "authentication_error",
+          ({ message }: { message: string }) => {
+            console.error("Failed to authenticate", message);
+          }
+        );
+        player.on("account_error", ({ message }: { message: string }) => {
           console.error("Failed to validate Spotify account", message);
         });
-        player.on("playback_error", ({ message }) => {
+        player.on("playback_error", ({ message }: { message: string }) => {
           console.error("Failed to perform playback", message);
         });
 
@@ -167,7 +192,7 @@ function App() {
     };
   }
 
-  function transferPlayback(device_id, access_token) {
+  function transferPlayback(device_id: string, access_token: string) {
     console.log("access_token", access_token);
     fetch("https://api.spotify.com/v1/me/player", {
       method: "PUT",
@@ -182,7 +207,7 @@ function App() {
     });
   }
 
-  function transferPlaybackSong(uri) {
+  function transferPlaybackSong(uri: string) {
     console.log("access_token", accessToken);
     fetch("https://api.spotify.com/v1/me/player/play", {
       method: "PUT",
@@ -194,6 +219,7 @@ function App() {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    setPP("play");
   }
 
   const toggleplay = () => {
@@ -202,27 +228,30 @@ function App() {
       console.log("if accepted", "pauseplay", pauseplay);
       if (pauseplay === "play") {
         console.log("pausing");
-        player.pause();
+        (player as any).pause();
         setPP("pause");
       } else if (pauseplay === "pause") {
         console.log("playing");
-        player.resume();
+        (player as any).resume();
         setPP("play");
       }
     }
   };
-  const nextSong = () => {
+  // Type 'Function' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+  // Type 'Function' provides no match for the signature '(event: MouseEvent<HTMLButtonElement, MouseEvent>): void'.ts(2322)
+
+  const nextSong: MouseEventHandler<HTMLButtonElement> = () => {
     // console.log("toggleplay ", player);
     if (player) {
       console.log("next song");
-      player.nextTrack();
+      (player as any).nextTrack();
     }
   };
-  const prevSong = () => {
+  const prevSong: MouseEventHandler<HTMLButtonElement> = () => {
     // console.log("toggleplay ", player);
     if (player) {
       console.log("previous song");
-      player.previousTrack();
+      (player as any).previousTrack();
     }
   };
   return (
@@ -267,11 +296,34 @@ function App() {
                 </div>
               </div>
               <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-                <li className="menu-title font-light">Recommended</li>
+                <li className="menu-title font-light">Top Songs</li>
                 <li className="font-light">
-                  <a>Higher Love</a>
+                  {/* <a>
+                    {topItems.map((item) => (
+                      <div>
+                        <svg
+                          className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                          aria-hidden="false"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 18V6l8 6-8 6Z"
+                          />
+                        </svg>{" "}
+                        {item.name}
+                      </div>
+                    ))}
+                  </a> */}
                 </li>
-                <li className="font-light">
+                {/* <li className="font-light">
                   <a>Purple Lamborghini</a>
                 </li>
                 <li className="menu-title font-light">More</li>
@@ -287,12 +339,26 @@ function App() {
                 </li>
                 <li className="font-light">
                   <a>Purple Lamborghini</a>
-                </li>
+                </li> */}
               </ul>
             </div>
 
             <div className="max-h-screen">
-              <button id="login">Login to Spotify</button>
+              {!accessToken && (
+                <button
+                  id="login"
+                  onClick={() => {
+                    const scopes =
+                      "user-read-playback-state user-modify-playback-state streaming user-top-read";
+                    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
+                      redirectUri
+                    )}&scope=${encodeURIComponent(scopes)}`;
+                    (window as any).location = authUrl;
+                  }}
+                >
+                  Login to Spotify
+                </button>
+              )}
               <div className="flex-grow">
                 <div className="">
                   <div className="flex-none gap-2"></div>
@@ -310,11 +376,13 @@ function App() {
                             if (apiServices) {
                               apiServices
                                 .songSearch(searchVal)
-                                .then((res) => {
+                                .then((res: Response) => {
                                   console.log("res", res);
                                   return res.json();
                                 })
-                                .then((res) => setSongTable(res.tracks.items));
+                                .then((res: Response) =>
+                                  setSongTable((res as any).tracks.items)
+                                );
                             }
                           }}
                         >
@@ -323,14 +391,12 @@ function App() {
                             onChange={(e) => setSearchVal(e.target.value)}
                             type="text"
                             placeholder="Search"
-                            className="input input-bordered max-w-[80%]"
+                            className="input input-bordered"
                           />
                         </form>
                       </div>
 
-                      <div className="btn">test</div>
-
-                      <div className="dropdown dropdown-end">
+                      {/* <div className="dropdown dropdown-end">
                         <div
                           tabIndex={0}
                           role="button"
@@ -360,7 +426,7 @@ function App() {
                             <a>Logout</a>
                           </li>
                         </ul>
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="">
@@ -381,17 +447,41 @@ function App() {
                           {/* row 1 */}
 
                           {songTable.map((song, index) => (
-                            <button>
-                              <tr className="text-neutral-300">
-                                <th>{index + 1}</th>
-                                <td>{song.name}</td>
-                                <td>
-                                  {song.artists
-                                    .map((artist) => artist.name)
-                                    .join(", ")}
-                                </td>{" "}
-                              </tr>
-                            </button>
+                            // <button>
+                            <tr className="text-neutral-300">
+                              <th>
+                                <button
+                                  onClick={() => {
+                                    transferPlaybackSong(song.uri);
+                                  }}
+                                >
+                                  <svg
+                                    className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                                    aria-hidden="false"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      stroke="currentColor"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M8 18V6l8 6-8 6Z"
+                                    />
+                                  </svg>
+                                </button>
+                              </th>
+                              <td>{song.name}</td>
+                              <td>
+                                {song.artists
+                                  .map((artist) => (artist as any).name)
+                                  .join(", ")}
+                              </td>{" "}
+                            </tr>
+                            // </button>
                           ))}
                           {/* <tr>
                       <th>2</th>
@@ -436,6 +526,9 @@ function App() {
             pauseplay={pauseplay}
             prevSong={prevSong}
             nextSong={nextSong}
+            name={currentsonginfo ? currentsonginfo.name : undefined}
+            artists={currentsonginfo ? currentsonginfo.artists : undefined}
+            album_art={currentsonginfo ? currentsonginfo.album_art : undefined}
           />
         </div>
       </div>
