@@ -144,10 +144,6 @@ function App() {
             return;
           }
           console.log("curr_state", player.getCurrentState());
-          player.getCurrentState().then((state: Object) => {
-            // !state ? setActive(false) : setActive(true);
-            // player.pause();
-          });
 
           songSetup(state);
         });
