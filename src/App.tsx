@@ -94,7 +94,8 @@ function App() {
   };
   useEffect(() => {
     if (playerState) {
-      // setPP(playerState.paused ? "play" : "pause");
+      // console.log("player state defined", playerState);
+      setPP(playerState.paused ? "pause" : "play");
     }
     songSetup();
   }, [playerState]);
@@ -204,7 +205,7 @@ function App() {
           if (!state) {
             return;
           }
-          console.log("curr_state", player.getCurrentState());
+          console.log("curr_state", player.getCurrentState(), state);
           // console.log("state", playerState.paused);
           setPlayerState(state);
         });
@@ -273,7 +274,7 @@ function App() {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    setPP("play");
+    // setPP("play");
   }
 
   const toggleplay = () => {
@@ -283,11 +284,11 @@ function App() {
       if (pauseplay === "play") {
         console.log("pausing");
         (player as any).pause();
-        setPP("pause");
+        // setPP("pause");
       } else if (pauseplay === "pause") {
         console.log("playing");
         (player as any).resume();
-        setPP("play");
+        // setPP("play");
       }
     }
   };
@@ -496,58 +497,61 @@ function App() {
                   </div>
 
                   <div className="min-h-[80%] w-full">
-                    <table className="table-sm">
-                      {/* head */}
-                      <thead className="font-light">
-                        <tr>
-                          <th></th>
-                          <th className="font-light text-neutral-400">Title</th>
-                          <th className="font-light text-neutral-400">
-                            Artist
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* row 1 */}
-
-                        {songTable.map((song) => (
-                          // <button>
-                          <tr className="text-neutral-300">
-                            <th>
-                              <button
-                                onClick={() => {
-                                  transferPlaybackSong(song.uri);
-                                }}
-                              >
-                                <svg
-                                  className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                                  aria-hidden="false"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M8 18V6l8 6-8 6Z"
-                                  />
-                                </svg>
-                              </button>
+                    <div className="card card-side bg-base-100 shadow-xl">
+                      <table className="table-sm">
+                        {/* head */}
+                        <thead className="font-light">
+                          <tr>
+                            <th></th>
+                            <th className="font-light text-neutral-400">
+                              Title
                             </th>
-                            <td>{song.name}</td>
-                            <td>
-                              {song.artists
-                                .map((artist) => (artist as any).name)
-                                .join(", ")}
-                            </td>{" "}
+                            <th className="font-light text-neutral-400">
+                              Artist
+                            </th>
                           </tr>
-                          // </button>
-                        ))}
-                        {/* <tr>
+                        </thead>
+                        <tbody>
+                          {/* row 1 */}
+
+                          {songTable.map((song) => (
+                            // <button>
+                            <tr className="text-neutral-300">
+                              <th>
+                                <button
+                                  onClick={() => {
+                                    transferPlaybackSong(song.uri);
+                                  }}
+                                >
+                                  <svg
+                                    className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                                    aria-hidden="false"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      stroke="currentColor"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M8 18V6l8 6-8 6Z"
+                                    />
+                                  </svg>
+                                </button>
+                              </th>
+                              <td>{song.name}</td>
+                              <td>
+                                {song.artists
+                                  .map((artist) => (artist as any).name)
+                                  .join(", ")}
+                              </td>{" "}
+                            </tr>
+                            // </button>
+                          ))}
+                          {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
                       <td>Desktop Support Technician</td>
@@ -559,8 +563,9 @@ function App() {
                       <td>Tax Accountant</td>
                       <td>Red</td>
                     </tr> */}
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
