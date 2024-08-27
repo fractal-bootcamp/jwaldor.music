@@ -1,6 +1,8 @@
 export type SpotifyServiceOptions = {
   songSearch: Function;
   getTop: Function;
+  getMe: Function;
+  getRecs: Function;
 };
 
 export const SpotifyServices = (access_token: string) => {
@@ -19,7 +21,23 @@ export const SpotifyServices = (access_token: string) => {
         }
       ),
     getTop: () =>
-      fetch(`https://api.spotify.com/v1/me/top/tracks`, {
+      fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      }),
+    getMe: () =>
+      fetch(`https://api.spotify.com/v1/me`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      }),
+    getRecs: () =>
+      fetch(`https://api.spotify.com/v1/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -29,4 +47,4 @@ export const SpotifyServices = (access_token: string) => {
   };
 };
 
-//?time_range=short_term&limit=8
+//&limit=8
