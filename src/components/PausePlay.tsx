@@ -94,7 +94,6 @@ export default function PausePlay({
           <div
             className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-300"
             onMouseEnter={() => {
-              const box = document.getElementById("player-info");
               // setShowTitle(true);
               // animate(box, {
               //   scale: 2,

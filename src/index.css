@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
- /* overflow-y: hidden; /* Hide vertical scrollbar */
- /* overflow-x: hidden; /* Hide horizontal scrollbar */
-}
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
