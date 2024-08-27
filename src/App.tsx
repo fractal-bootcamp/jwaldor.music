@@ -280,19 +280,19 @@ function App() {
             <a>Purple Lamborghini</a>
           </li>
         </ul> */}
-      <div className="flex flex-row">
-        <div className="flex flex-col">
-          <div className="flex flex-row ">
-            <div className="flex flex-col">
-              <div className="">
-                <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
-                  <a className="btn btn-ghost text-xl">Music</a>
-                </div>
+      {/* <div className="flex flex-row"> */}
+      <div className="flex flex-col">
+        <div className="flex flex-row ">
+          <div className="flex flex-col">
+            <div className="">
+              <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
+                <a className="btn btn-ghost text-xl">Music</a>
               </div>
-              <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-                <li className="menu-title font-light">Top Songs</li>
-                <li className="font-light">
-                  {/* <a>
+            </div>
+            <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
+              <li className="menu-title font-light">Top Songs</li>
+              <li className="font-light">
+                {/* <a>
                     {topItems.map((item) => (
                       <div>
                         <svg
@@ -316,8 +316,8 @@ function App() {
                       </div>
                     ))}
                   </a> */}
-                </li>
-                {/* <li className="font-light">
+              </li>
+              {/* <li className="font-light">
                   <a>Purple Lamborghini</a>
                 </li>
                 <li className="menu-title font-light">More</li>
@@ -334,63 +334,63 @@ function App() {
                 <li className="font-light">
                   <a>Purple Lamborghini</a>
                 </li> */}
-              </ul>
-            </div>
+            </ul>
+          </div>
 
-            <div className="max-h-screen">
-              {!accessToken && (
-                <button
-                  id="login"
-                  onClick={() => {
-                    const scopes =
-                      "user-read-playback-state user-modify-playback-state streaming user-top-read";
-                    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
-                      redirectUri
-                    )}&scope=${encodeURIComponent(scopes)}`;
-                    (window as any).location = authUrl;
-                  }}
-                >
-                  Login to Spotify
-                </button>
-              )}
-              <div className="flex-grow">
-                <div className="">
-                  <div className="flex-none gap-2"></div>
-                </div>
-                <div className="flex flex-row text-blue-200">
-                  {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
-                  {/* </div> */}
-                  <div className="flex flex-col">
-                    <div className="flex">
-                      <div className="form-control ml-2 mt-2">
-                        <form
-                          onSubmit={(e) => {
-                            e.preventDefault();
-                            console.log("search happening");
-                            if (apiServices) {
-                              apiServices
-                                .songSearch(searchVal)
-                                .then((res: Response) => {
-                                  console.log("res", res);
-                                  return res.json();
-                                })
-                                .then((res: Response) =>
-                                  setSongTable((res as any).tracks.items)
-                                );
-                            }
-                          }}
-                        >
-                          <input
-                            value={searchVal}
-                            onChange={(e) => setSearchVal(e.target.value)}
-                            type="text"
-                            placeholder="Search"
-                            className="input input-bordered"
-                          />
-                        </form>
-                      </div>
+          <div className="max-h-screen">
+            {!accessToken && (
+              <button
+                id="login"
+                onClick={() => {
+                  const scopes =
+                    "user-read-playback-state user-modify-playback-state streaming user-top-read";
+                  const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
+                    redirectUri
+                  )}&scope=${encodeURIComponent(scopes)}`;
+                  (window as any).location = authUrl;
+                }}
+              >
+                Login to Spotify
+              </button>
+            )}
+            <div className="flex-grow">
+              <div className="">
+                <div className="flex-none gap-2"></div>
+              </div>
+              <div className="flex flex-row text-blue-200">
+                {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
+                {/* </div> */}
+                <div className="flex flex-col">
+                  <div className="flex">
+                    <div className="form-control ml-2 mt-2">
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          console.log("search happening");
+                          if (apiServices) {
+                            apiServices
+                              .songSearch(searchVal)
+                              .then((res: Response) => {
+                                console.log("res", res);
+                                return res.json();
+                              })
+                              .then((res: Response) =>
+                                setSongTable((res as any).tracks.items)
+                              );
+                          }
+                        }}
+                      >
+                        <input
+                          value={searchVal}
+                          onChange={(e) => setSearchVal(e.target.value)}
+                          type="text"
+                          placeholder="Search"
+                          className="input input-bordered"
+                        />
+                      </form>
+                    </div>
 
-                      {/* <div className="dropdown dropdown-end">
+                    {/* <div className="dropdown dropdown-end">
                         <div
                           tabIndex={0}
                           role="button"
@@ -421,63 +421,61 @@ function App() {
                           </li>
                         </ul>
                       </div> */}
-                    </div>
+                  </div>
 
-                    <div className="">
-                      <table className="table-sm">
-                        {/* head */}
-                        <thead className="font-light">
-                          <tr>
-                            <th></th>
-                            <th className="font-light text-neutral-400">
-                              Title
-                            </th>
-                            <th className="font-light text-neutral-400">
-                              Artist
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* row 1 */}
+                  <div className="min-h-[80%] w-full">
+                    <table className="table-sm">
+                      {/* head */}
+                      <thead className="font-light">
+                        <tr>
+                          <th></th>
+                          <th className="font-light text-neutral-400">Title</th>
+                          <th className="font-light text-neutral-400">
+                            Artist
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* row 1 */}
 
-                          {songTable.map((song) => (
-                            // <button>
-                            <tr className="text-neutral-300">
-                              <th>
-                                <button
-                                  onClick={() => {
-                                    transferPlaybackSong(song.uri);
-                                  }}
+                        {songTable.map((song) => (
+                          // <button>
+                          <tr className="text-neutral-300">
+                            <th>
+                              <button
+                                onClick={() => {
+                                  transferPlaybackSong(song.uri);
+                                }}
+                              >
+                                <svg
+                                  className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                                  aria-hidden="false"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
                                 >
-                                  <svg
-                                    className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                                    aria-hidden="false"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      stroke="currentColor"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M8 18V6l8 6-8 6Z"
-                                    />
-                                  </svg>
-                                </button>
-                              </th>
-                              <td>{song.name}</td>
-                              <td>
-                                {song.artists
-                                  .map((artist) => (artist as any).name)
-                                  .join(", ")}
-                              </td>{" "}
-                            </tr>
-                            // </button>
-                          ))}
-                          {/* <tr>
+                                  <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 18V6l8 6-8 6Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <td>{song.name}</td>
+                            <td>
+                              {song.artists
+                                .map((artist) => (artist as any).name)
+                                .join(", ")}
+                            </td>{" "}
+                          </tr>
+                          // </button>
+                        ))}
+                        {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
                       <td>Desktop Support Technician</td>
@@ -489,14 +487,14 @@ function App() {
                       <td>Tax Accountant</td>
                       <td>Red</td>
                     </tr> */}
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
-            {/* {!is_active && (
+          </div>
+          {/* {!is_active && (
             <div className="container">
               <div className="main-wrapper">
                 <b>
@@ -514,18 +512,18 @@ function App() {
               </div>
             </div>
           )} */}
-          </div>
-          <PausePlay
-            toggleplay={toggleplay}
-            pauseplay={pauseplay}
-            prevSong={prevSong}
-            nextSong={nextSong}
-            name={currentsonginfo ? currentsonginfo.name : undefined}
-            artists={currentsonginfo ? currentsonginfo.artists : undefined}
-            album_art={currentsonginfo ? currentsonginfo.album_art : undefined}
-          />
         </div>
+        <PausePlay
+          toggleplay={toggleplay}
+          pauseplay={pauseplay}
+          prevSong={prevSong}
+          nextSong={nextSong}
+          name={currentsonginfo ? currentsonginfo.name : undefined}
+          artists={currentsonginfo ? currentsonginfo.artists : undefined}
+          album_art={currentsonginfo ? currentsonginfo.album_art : undefined}
+        />
       </div>
+      {/* </div> */}
     </>
   );
 }
