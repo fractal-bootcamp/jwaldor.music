@@ -1,14 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import PausePlay from "./components/PausePlay";
 // import WebPlayback from "./components/WebPlayerSpotify";
 import { SpotifyServices, SpotifyServiceOptions } from "./api";
 import { MouseEventHandler } from "react";
 
 import "./App.css";
-import { access } from "fs";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -446,7 +443,7 @@ function App() {
                         <tbody>
                           {/* row 1 */}
 
-                          {songTable.map((song, index) => (
+                          {songTable.map((song) => (
                             // <button>
                             <tr className="text-neutral-300">
                               <th>
