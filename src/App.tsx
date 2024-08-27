@@ -19,7 +19,7 @@ function App() {
     undefined | SpotifyServiceOptions
   >(undefined);
   const [songTable, setSongTable] = useState(
-    Array<{ name: string; artists: Array<Object> }>
+    Array<{ name: string; artists: Array<Object>; uri: string }>
   );
 
   const [is_active, setActive] = useState(false);
@@ -27,6 +27,8 @@ function App() {
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
+
+  // function seekSong()
 
   useEffect(() => setApiServices(SpotifyServices(accessToken)), [accessToken]);
 
@@ -176,6 +178,20 @@ function App() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token}`,
+      },
+    });
+  }
+
+  function transferPlaybackSong(uri) {
+    console.log("access_token", accessToken);
+    fetch("https://api.spotify.com/v1/me/player/play", {
+      method: "PUT",
+      body: JSON.stringify({
+        uris: [uri],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
     });
   }
@@ -363,16 +379,19 @@ function App() {
                         </thead>
                         <tbody>
                           {/* row 1 */}
+
                           {songTable.map((song, index) => (
-                            <tr className="text-neutral-300">
-                              <th>{index + 1}</th>
-                              <td>{song.name}</td>
-                              <td>
-                                {song.artists
-                                  .map((artist) => artist.name)
-                                  .join(", ")}
-                              </td>{" "}
-                            </tr>
+                            <button>
+                              <tr className="text-neutral-300">
+                                <th>{index + 1}</th>
+                                <td>{song.name}</td>
+                                <td>
+                                  {song.artists
+                                    .map((artist) => artist.name)
+                                    .join(", ")}
+                                </td>{" "}
+                              </tr>
+                            </button>
                           ))}
                           {/* <tr>
                       <th>2</th>
