@@ -4,19 +4,32 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import PausePlay from "./components/PausePlay";
 import WebPlayback from "./components/WebPlayerSpotify";
+import { SpotifyServices, SpotifyServiceOptions } from "./api";
 
 import "./App.css";
+import { access } from "fs";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
   const playerRef = useRef(undefined);
   const [pauseplay, setPP] = useState("play");
+  const [searchVal, setSearchVal] = useState("");
+  const [apiServices, setApiServices] = useState<
+    undefined | SpotifyServiceOptions
+  >(undefined);
+  const [songTable, setSongTable] = useState(
+    Array<{ name: string; artists: Array<Object> }>
+  );
+
   const [is_active, setActive] = useState(false);
   const [setupDone, setSetupDone] = useState(false);
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = "http://localhost:5173";
+
+  useEffect(() => setApiServices(SpotifyServices(accessToken)), [accessToken]);
+
   useEffect(() => {
     console.log("useEffect");
     const hash = window.location.hash.substring(1);
@@ -228,113 +241,140 @@ function App() {
             <a>Purple Lamborghini</a>
           </li>
         </ul> */}
-      <div className="flex flex-col max-h-screen min-h-screen">
-        <div className="flex flex-row"></div>
-
-        <div className="flex flex-row max-w-fit">
-          <div className="flex flex-col">
-            <div className="">
-              <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
-                <a className="btn btn-ghost text-xl">Tidal</a>
-              </div>
-            </div>
-            <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-              <li className="menu-title font-light">Recommended</li>
-              <li className="font-light">
-                <a>Higher Love</a>
-              </li>
-              <li className="font-light">
-                <a>Purple Lamborghini</a>
-              </li>
-              <li className="menu-title font-light">More</li>
-              <li className="font-light">
-                <a>Higher Love</a>
-              </li>
-              <li className="font-light">
-                <a>Purple Lamborghini</a>
-              </li>
-              <li className="menu-title font-light">More</li>
-              <li className="font-light">
-                <a>Higher Love</a>
-              </li>
-              <li className="font-light">
-                <a>Purple Lamborghini</a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="max-h-screen">
-            <button id="login">Login to Spotify</button>
-            <div className="flex-grow">
+      <div className="flex flex-row">
+        <div className="flex flex-col max-h-screen min-h-screen">
+          <div className="flex flex-row ">
+            <div className="flex flex-col">
               <div className="">
-                <div className="flex-none gap-2"></div>
+                <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
+                  <a className="btn btn-ghost text-xl">Tidal</a>
+                </div>
               </div>
-              <div className="flex flex-row text-blue-200">
-                {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
-                {/* </div> */}
-                <div className="flex flex-col">
-                  <div className="flex">
-                    <div className="form-control ml-2 mt-2">
-                      <input
-                        type="text"
-                        placeholder="Search"
-                        className="input input-bordered max-w-[80%]"
-                      />
-                    </div>
+              <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
+                <li className="menu-title font-light">Recommended</li>
+                <li className="font-light">
+                  <a>Higher Love</a>
+                </li>
+                <li className="font-light">
+                  <a>Purple Lamborghini</a>
+                </li>
+                <li className="menu-title font-light">More</li>
+                <li className="font-light">
+                  <a>Higher Love</a>
+                </li>
+                <li className="font-light">
+                  <a>Purple Lamborghini</a>
+                </li>
+                <li className="menu-title font-light">More</li>
+                <li className="font-light">
+                  <a>Higher Love</a>
+                </li>
+                <li className="font-light">
+                  <a>Purple Lamborghini</a>
+                </li>
+              </ul>
+            </div>
 
-                    <div className="dropdown dropdown-end">
-                      <div
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-ghost btn-circle avatar"
-                      >
-                        <div className="w-10 rounded-full">
-                          <img
-                            alt="Tailwind CSS Navbar component"
-                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+            <div className="max-h-screen">
+              <button id="login">Login to Spotify</button>
+              <div className="flex-grow">
+                <div className="">
+                  <div className="flex-none gap-2"></div>
+                </div>
+                <div className="flex flex-row text-blue-200">
+                  {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
+                  {/* </div> */}
+                  <div className="flex flex-col">
+                    <div className="flex">
+                      <div className="form-control ml-2 mt-2">
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            console.log("search happening");
+                            if (apiServices) {
+                              apiServices
+                                .songSearch(searchVal)
+                                .then((res) => {
+                                  console.log("res", res);
+                                  return res.json();
+                                })
+                                .then((res) => setSongTable(res.tracks.items));
+                            }
+                          }}
+                        >
+                          <input
+                            value={searchVal}
+                            onChange={(e) => setSearchVal(e.target.value)}
+                            type="text"
+                            placeholder="Search"
+                            className="input input-bordered max-w-[80%]"
                           />
-                        </div>
+                        </form>
                       </div>
-                      <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-                      >
-                        <li>
-                          <a className="justify-between">
-                            Profile
-                            <span className="badge">New</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a>Settings</a>
-                        </li>
-                        <li>
-                          <a>Logout</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
 
-                  <div className="">
-                    <table className="table-sm">
-                      {/* head */}
-                      <thead className="font-light">
-                        <tr>
-                          <th></th>
-                          <th className="font-light text-neutral-400">Title</th>
-                          <th className="font-light text-neutral-400">
-                            Artist
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* row 1 */}
-                        <tr className="text-neutral-300">
-                          <th>1</th>
-                          <td>Cy Ganderton</td>
-                          <td>Quality Control Specialist</td>
-                        </tr>
-                        {/* <tr>
+                      <div className="btn">test</div>
+
+                      <div className="dropdown dropdown-end">
+                        <div
+                          tabIndex={0}
+                          role="button"
+                          className="btn btn-ghost btn-circle avatar"
+                        >
+                          <div className="w-10 rounded-full">
+                            <img
+                              alt="Tailwind CSS Navbar component"
+                              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                            />
+                          </div>
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                        >
+                          <li>
+                            <a className="justify-between">
+                              Profile
+                              <span className="badge">New</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a>Settings</a>
+                          </li>
+                          <li>
+                            <a>Logout</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="">
+                      <table className="table-sm">
+                        {/* head */}
+                        <thead className="font-light">
+                          <tr>
+                            <th></th>
+                            <th className="font-light text-neutral-400">
+                              Title
+                            </th>
+                            <th className="font-light text-neutral-400">
+                              Artist
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* row 1 */}
+                          {songTable.map((song, index) => (
+                            <tr className="text-neutral-300">
+                              <th>{index + 1}</th>
+                              <td>{song.name}</td>
+                              <td>
+                                {song.artists
+                                  .map((artist) => artist.name)
+                                  .join(", ")}
+                              </td>{" "}
+                            </tr>
+                          ))}
+                          {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
                       <td>Desktop Support Technician</td>
@@ -346,14 +386,14 @@ function App() {
                       <td>Tax Accountant</td>
                       <td>Red</td>
                     </tr> */}
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* {!is_active && (
+            {/* {!is_active && (
             <div className="container">
               <div className="main-wrapper">
                 <b>
@@ -371,13 +411,14 @@ function App() {
               </div>
             </div>
           )} */}
+          </div>
+          <PausePlay
+            toggleplay={toggleplay}
+            pauseplay={pauseplay}
+            prevSong={prevSong}
+            nextSong={nextSong}
+          />
         </div>
-        <PausePlay
-          toggleplay={toggleplay}
-          pauseplay={pauseplay}
-          prevSong={prevSong}
-          nextSong={nextSong}
-        />
       </div>
     </>
   );
