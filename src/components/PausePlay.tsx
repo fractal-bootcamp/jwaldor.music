@@ -42,8 +42,9 @@ export default function PausePlay({
   // bg-base-200 border-s border-e border-t border-b border-gray-100
   return (
     <>
-      <div className="flex flex-row justify-center mt-auto">
-        <div className="flex flex-col justify-center w-full">
+      {/* <div className="flex flex-row justify-center mt-auto"> */}
+      <div className="">
+        <div className="flex flex-col justify-center w-full mt-auto">
           {/* <div className="card-body"></div> */}
           <motion.div
             // whileHover={{
@@ -217,6 +218,7 @@ export default function PausePlay({
           </div> */}
         </div>
       </div>
+      {/* </div> */}
     </>
   );
 }
