@@ -281,12 +281,12 @@ function App() {
           </li>
         </ul> */}
       <div className="flex flex-row">
-        <div className="flex flex-col max-h-full">
+        <div className="flex flex-col">
           <div className="flex flex-row ">
             <div className="flex flex-col">
               <div className="">
                 <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
-                  <a className="btn btn-ghost text-xl">Tidal</a>
+                  <a className="btn btn-ghost text-xl">Music</a>
                 </div>
               </div>
               <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
