@@ -37,13 +37,28 @@ export const SpotifyServices = (access_token: string) => {
         },
       }),
     getRecs: () =>
-      fetch(`https://api.spotify.com/v1/me`, {
+      fetch(``, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${access_token}`,
         },
       }),
+    saveTrack: (id: string) =>
+      fetch(
+        `https://api.spotify.com/v1/me/tracks
+`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+          },
+          body: JSON.stringify({
+            ids: id,
+          }),
+        }
+      ),
   };
 };
 

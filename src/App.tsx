@@ -17,15 +17,15 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState<undefined | Object>();
   const [currentsonginfo, setCurrentSongInfo] = useState<TrackType>();
+  const [playerState, setPlayerState] = useState<undefined | Object>();
   const playerRef = useRef(undefined);
-  const [pauseplay, setPP] = useState("play");
+  const [pauseplay, setPP] = useState<"play" | "pause">("play");
   const [searchVal, setSearchVal] = useState("");
   const [apiServices, setApiServices] = useState<
     undefined | SpotifyServiceOptions
   >(undefined);
-  const [songTable, setSongTable] = useState(
-    Array<{ name: string; artists: Array<Object>; uri: string }>
-  );
+  const [songTable, setSongTable] = useState(Array<TrackType>);
+  const [recList, setRecList] = useState<Array<TrackType>>();
   const [topItems, setTopItems] = useState(Array<TrackType>);
   // const [topItems, setTopItems] = useState(
   //   Array<{ name: string; artists: Array<Object>; uri: string }>
@@ -35,15 +35,64 @@ function App() {
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = import.meta.env.VITE_REDIRECT_URI;
-  console.log("redirectUri", redirectUri);
 
   // function seekSong()
 
-  useEffect(() => setApiServices(SpotifyServices(accessToken)), [accessToken]);
+  useEffect(() => {
+    setApiServices(SpotifyServices(accessToken));
+    console.log("set Api services");
+  }, [accessToken]);
+
+  const songSetup = () => {
+    // if (player.state)
+    if (playerState) {
+      const currentTrack = playerState.track_window.current_track;
+      // document.getElementById("track-name").innerText = currentTrack.name;
+      // document.getElementById("artist-name").innerText =
+      //   currentTrack.artists[0].name;
+      // document.getElementById("album-art").src = currentTrack.album.images[0]
+      //   .url
+      //   ? currentTrack.album.images[0].url
+      //   : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
+      setCurrentSongInfo({
+        name: currentTrack.name,
+        artists: currentTrack.artists,
+        album_art: currentTrack.album.images[0].url,
+      });
+      console.log("songSetup ");
+    }
+  };
+  const refreshRecommendations = () => {
+    if (playerState) {
+      console.log(
+        "refresh",
+        playerState.track_window.current_track.id,
+        apiServices
+      );
+      if (apiServices) {
+        console.log("calling API");
+        apiServices
+          .getRecs(playerState.track_window.current_track.id)
+          .then((res) => {
+            console.log("body", res);
+            return res.body;
+          })
+          .then((res) => console.log(res.values()));
+      }
+    }
+  };
+  useEffect(() => {
+    if (playerState) {
+      // setPP(playerState.paused ? "play" : "pause");
+    }
+    songSetup();
+    refreshRecommendations();
+  }, [playerState]);
 
   useEffect(() => {
+    console.log("apiservices changed");
     if (apiServices) {
-      console.log(apiServices);
+      console.log(apiServices, "apiServices");
       console.log(apiServices.getTop);
       apiServices
         .getTop()
@@ -51,6 +100,7 @@ function App() {
         .then((res) => {
           setTopItems(res.items);
           setSongTable(res.items.slice(0, 5));
+          console.log("set song table");
         });
       // setTopItems(apiServices.getTop());
       // apiServices.getMe().then((res) => console.log("getme", res));
@@ -97,28 +147,6 @@ function App() {
 
     document.body.appendChild(script);
 
-    const songSetup = (state: any) => {
-      // if (player.state)
-      const currentTrack = state.track_window.current_track;
-      setCurrentSongInfo({
-        name: currentTrack.name,
-        artists: currentTrack.artists,
-        album_art: currentTrack.album.images[0],
-      });
-      // document.getElementById("track-name").innerText = currentTrack.name;
-      // document.getElementById("artist-name").innerText =
-      //   currentTrack.artists[0].name;
-      // document.getElementById("album-art").src = currentTrack.album.images[0]
-      //   .url
-      //   ? currentTrack.album.images[0].url
-      //   : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg";
-      setCurrentSongInfo({
-        name: currentTrack.name,
-        artists: currentTrack.artists,
-        album_art: currentTrack.album.images[0].url,
-      });
-      console.log("songSetup ");
-    };
     // if (localStorage["device_id"]) {
     //   transferPlayback(device_id, access_token);
     // }
@@ -160,12 +188,13 @@ function App() {
 
         // Player state changed
         player.addListener("player_state_changed", (state: Object) => {
+          console.log("player state changed");
           if (!state) {
             return;
           }
           console.log("curr_state", player.getCurrentState());
-
-          songSetup(state);
+          // console.log("state", playerState.paused);
+          setPlayerState(state);
         });
 
         // Extract the access token from the URL hash

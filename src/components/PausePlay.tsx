@@ -26,7 +26,6 @@ export default function PausePlay({
   //   aColor: "#FFF",
   //   curve: bezier(),
   // });
-  console.log("album_art", album_art);
 
   const controls = useAnimationControls();
 
