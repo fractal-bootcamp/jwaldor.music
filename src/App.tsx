@@ -27,6 +27,7 @@ function App() {
   const [songTable, setSongTable] = useState(Array<TrackType>);
   const [recList, setRecList] = useState<Array<TrackType>>();
   const [topItems, setTopItems] = useState(Array<TrackType>);
+  const [recentlySaved, setRecentlySaved] = useState([]);
   // const [topItems, setTopItems] = useState(
   //   Array<{ name: string; artists: Array<Object>; uri: string }>
   // );
@@ -340,7 +341,7 @@ function App() {
                 Recommendations based on current song
               </li>
 
-              {recList.map((item) => (
+              {(recList ? recList : []).map((item) => (
                 <li className="font-light">
                   <a>
                     <div>
