@@ -1,7 +1,6 @@
-import { motion, animate, useAnimationControls } from "framer-motion";
-import { useState, useEffect, MouseEventHandler } from "react";
-import { useControls } from "leva";
-import { bezier } from "@leva-ui/plugin-bezier";
+import { motion, useAnimationControls } from "framer-motion";
+import { MouseEventHandler } from "react";
+// import { bezier } from "@leva-ui/plugin-bezier";
 
 export default function PausePlay({
   toggleplay,
@@ -20,13 +19,13 @@ export default function PausePlay({
   artists: Array<{ name: string }> | undefined;
   album_art: string | undefined;
 }) {
-  const [showTitle, setShowTitle] = useState(false);
-  const [mouseHover, setMouseHover] = useState(false);
-  const { aNumber, aColor, curve } = useControls({
-    aNumber: 1,
-    aColor: "#FFF",
-    curve: bezier(),
-  });
+  // const [showTitle, setShowTitle] = useState(false);
+  // const [mouseHover, setMouseHover] = useState(false);
+  // const { aNumber, aColor, curve } = useControls({
+  //   aNumber: 1,
+  //   aColor: "#FFF",
+  //   curve: bezier(),
+  // });
   console.log("album_art", album_art);
 
   const controls = useAnimationControls();
@@ -102,28 +101,26 @@ export default function PausePlay({
               //   y: -110,
               //   transition: { ease: "easeIn" },
               // });
-              controls
-                .start({
-                  scale: 1.7,
-                  y: -70,
-                  transition: { ease: curve, duration: 0 },
-                })
-                .then((res) => {
-                  // if (mouseHover) {
-                  setShowTitle(true);
-                  // }
-                });
+              controls.start({
+                scale: 1.7,
+                y: -70,
+                transition: { ease: "linear", duration: 0 },
+              });
+              // .then((res) => {
+              //   // if (mouseHover) {
+              //   // setShowTitle(true);
+              //   // }
+              // });
             }}
             onMouseLeave={() => {
-              setShowTitle(false);
+              // setShowTitle(false);
               // console.log("setshowtitle false");
-              controls
-                .start({
-                  scale: 1,
-                  y: 0,
-                  transition: { ease: "linear" },
-                })
-                .then((res) => setShowTitle(false));
+              controls.start({
+                scale: 1,
+                y: 0,
+                transition: { ease: "linear" },
+              });
+              // .then((res) => setShowTitle(false));
             }}
           >
             <div className="flex flex-col items-center w-1/2">
