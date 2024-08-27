@@ -73,11 +73,9 @@ function App() {
         console.log("calling API");
         apiServices
           .getRecs(playerState.track_window.current_track.id)
-          .then((res) => {
-            console.log("body", res);
-            return res.body;
-          })
-          .then((res) => console.log(res.values()));
+          .then((res) => res.json())
+          .then((res) => setRecList(res.tracks.slice(0, 5)));
+        // .then((res) => console.log(res.values()));
       }
     }
   };
@@ -338,11 +336,19 @@ function App() {
               </div>
             </div>
             <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-              <li className="menu-title font-light">Top Songs</li>
-              <li className="font-light">
-                {/* <a>
-                    {topItems.map((item) => (
-                      <div>
+              <li className="menu-title font-light">
+                Recommendations based on current song
+              </li>
+
+              {recList.map((item) => (
+                <li className="font-light">
+                  <a>
+                    <div>
+                      <button
+                        onClick={() => {
+                          transferPlaybackSong(item.uri);
+                        }}
+                      >
                         <svg
                           className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
                           aria-hidden="false"
@@ -361,10 +367,12 @@ function App() {
                           />
                         </svg>{" "}
                         {item.name}
-                      </div>
-                    ))}
-                  </a> */}
-              </li>
+                      </button>
+                    </div>
+                  </a>
+                </li>
+              ))}
+
               {/* <li className="font-light">
                   <a>Purple Lamborghini</a>
                 </li>

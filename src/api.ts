@@ -36,8 +36,8 @@ export const SpotifyServices = (access_token: string) => {
           Authorization: `Bearer ${access_token}`,
         },
       }),
-    getRecs: () =>
-      fetch(``, {
+    getRecs: (id: string) =>
+      fetch(`https://api.spotify.com/v1/recommendations?seed_tracks=${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
