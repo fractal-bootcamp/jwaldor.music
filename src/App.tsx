@@ -19,7 +19,7 @@ function App() {
     undefined | SpotifyServiceOptions
   >(undefined);
   const [songTable, setSongTable] = useState(
-    Array<{ title: string; artist: string }>
+    Array<{ name: string; artists: Array<Object> }>
   );
 
   const [is_active, setActive] = useState(false);
@@ -298,7 +298,7 @@ function App() {
                                   console.log("res", res);
                                   return res.json();
                                 })
-                                .then((res) => console.log(res.tracks.items));
+                                .then((res) => setSongTable(res.tracks.items));
                             }
                           }}
                         >
@@ -363,11 +363,17 @@ function App() {
                         </thead>
                         <tbody>
                           {/* row 1 */}
-                          <tr className="text-neutral-300">
-                            <th>1</th>
-                            <td>Cy Ganderton</td>
-                            <td>Quality Control Specialist</td>
-                          </tr>
+                          {songTable.map((song, index) => (
+                            <tr className="text-neutral-300">
+                              <th>{index + 1}</th>
+                              <td>{song.name}</td>
+                              <td>
+                                {song.artists
+                                  .map((artist) => artist.name)
+                                  .join(", ")}
+                              </td>{" "}
+                            </tr>
+                          ))}
                           {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
