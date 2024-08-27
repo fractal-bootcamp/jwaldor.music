@@ -31,7 +31,8 @@ function App() {
   // const [is_active, setActive] = useState(false);
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
-  const redirectUri = "http://localhost:5173";
+  const redirectUri = import.meta.env.VITE_REDIRECT_URI;
+  console.log("redirectUri", redirectUri);
 
   // function seekSong()
 
@@ -280,7 +281,7 @@ function App() {
           </li>
         </ul> */}
       <div className="flex flex-row">
-        <div className="flex flex-col max-h-screen min-h-screen">
+        <div className="flex flex-col max-h-full">
           <div className="flex flex-row ">
             <div className="flex flex-col">
               <div className="">
