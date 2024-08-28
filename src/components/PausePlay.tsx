@@ -138,12 +138,16 @@ export default function PausePlay({
             <div className="flex flex-col items-center w-1/2 mt-3">
               <div className="mb-1">
                 <div id="track-name" className={"text-xs text-center"}>
-                  {name ? name : "Track Name"}
+                  {name ? (
+                    name
+                  ) : (
+                    <span className="loading loading-bars loading-xs"></span>
+                  )}
                 </div>
                 <div id="artist-name" className={"text-xs text-center"}>
                   {artists
                     ? artists.map((artist) => artist.name).join(", ")
-                    : "Artist Name"}
+                    : ""}
                 </div>
               </div>
               {/* <div className="flex flex-row relative justify-center"> */}
@@ -233,16 +237,18 @@ export default function PausePlay({
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
               </svg>
             </button>
-            <img
-              className="hidden md:block w-24 h-24 absolute left-[4%] top-auto bottom-auto shadow-xl"
-              id="album-art"
-              src={
-                album_art
-                  ? album_art
-                  : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg"
-              }
-              alt="Album Art"
-            />
+            <div className="hidden md:block w-24 h-24 absolute left-[4%] top-auto bottom-auto shadow-xl">
+              {album_art ? (
+                <img
+                  className=""
+                  id="album-art"
+                  src={album_art}
+                  alt="Album Art"
+                />
+              ) : (
+                <span className="loading loading-bars loading-md"></span>
+              )}
+            </div>
           </div>
           {/* </div> */}
           {/* <div>
