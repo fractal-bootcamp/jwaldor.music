@@ -44,7 +44,12 @@ export default function PausePlay({
   return (
     <>
       {/* <div className="flex flex-row justify-center mt-auto"> */}
-      <div className="flex justify-center mt-16 sm:mt-auto">
+      <motion.div
+        drag="y"
+        dragElastic={1}
+        dragConstraints={{ top: -125, bottom: 30 }}
+        className="flex justify-center mt-16 sm:mt-auto"
+      >
         <div className="flex flex-col justify-center w-full md:mx-10">
           {/* <div className="card-body"></div> */}
           <motion.div
@@ -95,7 +100,7 @@ export default function PausePlay({
           </motion.div>
           {/* <div className="relative flex justify-center min-w-max"> */}
           <div
-            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-300 relative md:h-44 items-center"
+            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-300 relative md:h-40 items-center"
             onMouseEnter={() => {
               // setShowTitle(true);
               // animate(box, {
@@ -138,12 +143,16 @@ export default function PausePlay({
             <div className="flex flex-col items-center w-1/2 mt-3">
               <div className="mb-1">
                 <div id="track-name" className={"text-xs text-center"}>
-                  {name ? name : "Track Name"}
+                  {name ? (
+                    name
+                  ) : (
+                    <span className="loading loading-bars loading-xs"></span>
+                  )}
                 </div>
-                <div id="artist-name" className={"text-xs text-center"}>
+                <div id="artist-name" className={"text-xs text-center mb-2"}>
                   {artists
                     ? artists.map((artist) => artist.name).join(", ")
-                    : "Artist Name"}
+                    : ""}
                 </div>
               </div>
               {/* <div className="flex flex-row relative justify-center"> */}
@@ -170,20 +179,26 @@ export default function PausePlay({
                   onClick={toggleplay}
                 >
                   {pauseplay === "pause" && (
-                    <svg
+                    <motion.svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
                       className="size-6"
+                      whileHover={{
+                        color: "white",
+                        transition: { duration: 1 },
+                      }}
+                      whileTap={{ scale: 0.9 }}
+                      // whileInView={{ color: "slate-400" }}
                     >
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
                       />
-                    </svg>
+                    </motion.svg>
                   )}
                   {pauseplay === "play" && (
                     <svg
@@ -221,7 +236,11 @@ export default function PausePlay({
               </div>
               {/* </div> */}
             </div>
-            <button onClick={save_song}>
+            <button
+              onClick={save_song}
+              className="tooltip tooltip-success tooltip-right"
+              data-tip="Save to your library"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -233,16 +252,18 @@ export default function PausePlay({
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
               </svg>
             </button>
-            <img
-              className="hidden md:block w-24 h-24 absolute left-[4%] top-auto bottom-auto shadow-xl"
-              id="album-art"
-              src={
-                album_art
-                  ? album_art
-                  : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg"
-              }
-              alt="Album Art"
-            />
+            <div className="hidden md:block w-24 h-24 absolute left-[4%] top-auto bottom-auto shadow-xl">
+              {album_art ? (
+                <img
+                  className=""
+                  id="album-art"
+                  src={album_art}
+                  alt="Album Art"
+                />
+              ) : (
+                <span className="loading loading-bars loading-md"></span>
+              )}
+            </div>
           </div>
           {/* </div> */}
           {/* <div>
@@ -254,7 +275,7 @@ export default function PausePlay({
             </div>
           </div> */}
         </div>
-      </div>
+      </motion.div>
       {/* </div> */}
     </>
   );
