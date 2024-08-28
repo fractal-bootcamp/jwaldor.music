@@ -342,73 +342,69 @@ function App() {
           </li>
         </ul> */}
       {/* <div className="flex flex-row"> */}
+      {/* {(recList ? recList.length > 0 : false) && (
+        <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
+          <li className="menu-title font-light">
+            Recommendations based on recently saved
+          </li>
+
+          {(recList ? recList : []).map((item) => (
+            <li className="font-light">
+              <a>
+                <div>
+                  <button
+                    onClick={() => {
+                      transferPlaybackSong(item.uri);
+                    }}
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                      aria-hidden="false"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 18V6l8 6-8 6Z"
+                      />
+                    </svg>{" "}
+                    {item.name}
+                  </button>
+                </div>
+              </a>
+            </li>
+          ))}
+
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+          <li className="menu-title font-light">More</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+          <li className="menu-title font-light">More</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+        </ul>
+      )} */}
       <div className="flex flex-col min-h-screen">
         <div className="flex flex-row ">
-          <div className="flex flex-col">
-            <div className="">
-              <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
-                <a className="btn btn-ghost text-xl">Music</a>
-              </div>
-            </div>
-            {(recList ? recList.length > 0 : false) && (
-              <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-                <li className="menu-title font-light">
-                  Recommendations based on recently saved
-                </li>
-
-                {(recList ? recList : []).map((item) => (
-                  <li className="font-light">
-                    <a>
-                      <div>
-                        <button
-                          onClick={() => {
-                            transferPlaybackSong(item.uri);
-                          }}
-                        >
-                          <svg
-                            className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                            aria-hidden="false"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M8 18V6l8 6-8 6Z"
-                            />
-                          </svg>{" "}
-                          {item.name}
-                        </button>
-                      </div>
-                    </a>
-                  </li>
-                ))}
-
-                {/* <li className="font-light">
-                  <a>Purple Lamborghini</a>
-                </li>
-                <li className="menu-title font-light">More</li>
-                <li className="font-light">
-                  <a>Higher Love</a>
-                </li>
-                <li className="font-light">
-                  <a>Purple Lamborghini</a>
-                </li>
-                <li className="menu-title font-light">More</li>
-                <li className="font-light">
-                  <a>Higher Love</a>
-                </li>
-                <li className="font-light">
-                  <a>Purple Lamborghini</a>
-                </li> */}
-              </ul>
-            )}
-          </div>
+          {/* <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg w-20"> */}
+          <a className="btn btn-ghost text-xl pr-1 pl-2">Music</a>
+          {/* </div> */}
 
           <div className="max-h-screen">
             {!accessToken && (
@@ -428,44 +424,44 @@ function App() {
                 Login to Spotify
               </button>
             )}
-            <div className="flex-grow">
-              <div className="">
-                <div className="flex-none gap-2"></div>
-              </div>
-              <div className="flex flex-row text-blue-200">
-                {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
-                {/* </div> */}
-                <div className="flex flex-col">
-                  <div className="flex">
-                    <div className="form-control ml-2 mt-2">
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          console.log("search happening");
-                          if (apiServices) {
-                            apiServices
-                              .songSearch(searchVal)
-                              .then((res: Response) => {
-                                console.log("res", res);
-                                return res.json();
-                              })
-                              .then((res: Response) =>
-                                setSongTable((res as any).tracks.items)
-                              );
-                          }
-                        }}
-                      >
-                        <input
-                          value={searchVal}
-                          onChange={(e) => setSearchVal(e.target.value)}
-                          type="text"
-                          placeholder="Search"
-                          className="input input-bordered"
-                        />
-                      </form>
-                    </div>
+            {/* <div className="flex-grow"> */}
+            <div className="">
+              <div className="flex-none gap-2"></div>
+            </div>
+            <div className="flex flex-row text-blue-200">
+              {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
+              {/* </div> */}
+              <div className="flex flex-col">
+                <div className="flex">
+                  <div className="form-control ml-2 mt-2">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        console.log("search happening");
+                        if (apiServices) {
+                          apiServices
+                            .songSearch(searchVal)
+                            .then((res: Response) => {
+                              console.log("res", res);
+                              return res.json();
+                            })
+                            .then((res: Response) =>
+                              setSongTable((res as any).tracks.items)
+                            );
+                        }
+                      }}
+                    >
+                      <input
+                        value={searchVal}
+                        onChange={(e) => setSearchVal(e.target.value)}
+                        type="text"
+                        placeholder="Search"
+                        className="input input-bordered ml-2 mt-!"
+                      />
+                    </form>
+                  </div>
 
-                    {/* <div className="dropdown dropdown-end">
+                  {/* <div className="dropdown dropdown-end">
                         <div
                           tabIndex={0}
                           role="button"
@@ -496,64 +492,75 @@ function App() {
                           </li>
                         </ul>
                       </div> */}
-                  </div>
+                </div>
 
-                  <div className="min-h-[80%] w-full">
-                    <div className="card card-side bg-base-100 shadow-xl">
-                      <table className="table-sm">
-                        {/* head */}
-                        <thead className="font-light">
-                          <tr>
-                            <th></th>
-                            <th className="font-light text-neutral-400">
-                              Title
-                            </th>
-                            <th className="font-light text-neutral-400">
-                              Artist
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* row 1 */}
-
-                          {songTable.map((song) => (
-                            // <button>
-                            <tr className="text-neutral-300">
-                              <th>
-                                <button
-                                  onClick={() => {
-                                    transferPlaybackSong(song.uri);
-                                  }}
+                <div className="min-h-[80%] w-full flex flex-col">
+                  <div className="card card-side">
+                    <table className="table-sm">
+                      {/* head */}
+                      {/* <div className="font-light">
+                        <tr>
+                          <th></th>
+                          <th className="font-light text-neutral-400">Title</th>
+                          <th className="font-light text-neutral-400">
+                            Artist
+                          </th>
+                        </tr>
+                      </div> */}
+                      <tbody>
+                        {/* row 1 */}
+                        {/* <div className="text-neutral-300 bg-base-300 my-4 rounded-lg flex flex-row items-center h-12 w-28 pl-3">
+                          <div>Songs</div>
+                        </div> */}
+                        {/* <div className="bg-base-300"> */}
+                        <div className="card-body bg-base-100 text-slate-400 w-40 h-16 justify-center text-left mt-2">
+                          <h2 className="card-title">
+                            {recList ? "Recommended items" : "Top songs"}
+                          </h2>
+                        </div>
+                        {/* </div> */}
+                        {(recList ? recList : songTable).map((song) => (
+                          // <button>
+                          <div className="text-neutral-300 bg-base-300 mb-4 rounded-full flex flex-row items-center">
+                            <th>
+                              <button
+                                onClick={() => {
+                                  transferPlaybackSong(song.uri);
+                                }}
+                              >
+                                <svg
+                                  className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full mt-1 ml-1"
+                                  aria-hidden="false"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
                                 >
-                                  <svg
-                                    className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                                    aria-hidden="false"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      stroke="currentColor"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M8 18V6l8 6-8 6Z"
-                                    />
-                                  </svg>
-                                </button>
-                              </th>
-                              <td>{song.name}</td>
-                              <td>
+                                  <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 18V6l8 6-8 6Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <div>
+                              <td className=" text-slate-300 font-light">
+                                {song.name}
+                              </td>
+                              <td className="text-slate-400 font-light">
                                 {song.artists
                                   .map((artist) => (artist as any).name)
                                   .join(", ")}
                               </td>{" "}
-                            </tr>
-                            // </button>
-                          ))}
-                          {/* <tr>
+                            </div>
+                          </div>
+                          // </button>
+                        ))}
+                        {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
                       <td>Desktop Support Technician</td>
@@ -565,13 +572,13 @@ function App() {
                       <td>Tax Accountant</td>
                       <td>Red</td>
                     </tr> */}
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
+            {/* </div> */}
           </div>
           {/* {!is_active && (
             <div className="container">

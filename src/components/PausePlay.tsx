@@ -45,7 +45,7 @@ export default function PausePlay({
     <>
       {/* <div className="flex flex-row justify-center mt-auto"> */}
       <div className="flex justify-center mt-16 sm:mt-auto">
-        <div className="flex flex-col justify-center w-full md:max-w-[70%]">
+        <div className="flex flex-col justify-center w-full md:mx-10">
           {/* <div className="card-body"></div> */}
           <motion.div
             // whileHover={{
@@ -135,7 +135,7 @@ export default function PausePlay({
                 }
                 alt="Album Art"
               /> */}
-            <div className="flex flex-col items-center w-1/2">
+            <div className="flex flex-col items-center w-1/2 mt-3">
               <div className="mb-1">
                 <div id="track-name" className={"text-xs text-center"}>
                   {name ? name : "Track Name"}
@@ -234,7 +234,7 @@ export default function PausePlay({
               </svg>
             </button>
             <img
-              className="hidden md:block w-28 h-28 absolute left-3 top-auto bottom-auto shadow-xl"
+              className="hidden md:block w-24 h-24 absolute left-[4%] top-auto bottom-auto shadow-xl"
               id="album-art"
               src={
                 album_art
