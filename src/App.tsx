@@ -112,7 +112,10 @@ function App() {
         apiServices
           .getRecs(recentlySaved)
           .then((res) => res.json())
-          .then((res) => setRecList(res.tracks.slice(0, 5)));
+          .then((res) => {
+            setRecList(res.tracks.slice(0, 5));
+            setSongTable(res.tracks.slice(0, 5));
+          });
         // .then((res) => console.log(res.values()));
       }
     }
@@ -550,47 +553,51 @@ function App() {
                             </h2>
                           </div>
                           {/* </div> */}
-                          {(recList ? recList : songTable).map((song) => (
-                            // <button>
-                            <div className="text-neutral-300 bg-base-300 mb-4 rounded-full flex flex-row items-center">
-                              <th>
-                                <button
-                                  onClick={() => {
-                                    transferPlaybackSong(song.uri);
-                                  }}
-                                >
-                                  <svg
-                                    className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full mt-1 ml-1"
-                                    aria-hidden="false"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
+                          {songTable.length > 0 ? (
+                            songTable.map((song) => (
+                              // <button>
+                              <div className="text-neutral-300 bg-base-300 mb-4 rounded-full flex flex-row items-center">
+                                <th>
+                                  <button
+                                    onClick={() => {
+                                      transferPlaybackSong(song.uri);
+                                    }}
                                   >
-                                    <path
-                                      stroke="currentColor"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M8 18V6l8 6-8 6Z"
-                                    />
-                                  </svg>
-                                </button>
-                              </th>
-                              <div>
-                                <td className=" text-slate-300 font-light">
-                                  {song.name}
-                                </td>
-                                <td className="text-slate-400 font-light">
-                                  {song.artists
-                                    .map((artist) => (artist as any).name)
-                                    .join(", ")}
-                                </td>{" "}
+                                    <svg
+                                      className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full mt-1 ml-1"
+                                      aria-hidden="false"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 18V6l8 6-8 6Z"
+                                      />
+                                    </svg>
+                                  </button>
+                                </th>
+                                <div>
+                                  <td className=" text-slate-300 font-light">
+                                    {song.name}
+                                  </td>
+                                  <td className="text-slate-400 font-light">
+                                    {song.artists
+                                      .map((artist) => (artist as any).name)
+                                      .join(", ")}
+                                  </td>{" "}
+                                </div>
                               </div>
-                            </div>
-                            // </button>
-                          ))}
+                              // </button>
+                            ))
+                          ) : (
+                            <span className="loading loading-bars loading-md"></span>
+                          )}
                           {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
