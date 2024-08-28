@@ -234,7 +234,7 @@ export default function PausePlay({
               </svg>
             </button>
             <img
-              className="hidden md:block w-28 h-28 absolute left-3 top-auto bottom-auto shadow-xl"
+              className="hidden md:block w-24 h-24 absolute left-[4%] top-auto bottom-auto shadow-xl"
               id="album-art"
               src={
                 album_art

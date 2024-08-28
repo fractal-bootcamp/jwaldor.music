@@ -428,44 +428,44 @@ function App() {
                 Login to Spotify
               </button>
             )}
-            <div className="flex-grow">
-              <div className="">
-                <div className="flex-none gap-2"></div>
-              </div>
-              <div className="flex flex-row text-blue-200">
-                {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
-                {/* </div> */}
-                <div className="flex flex-col">
-                  <div className="flex">
-                    <div className="form-control ml-2 mt-2">
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          console.log("search happening");
-                          if (apiServices) {
-                            apiServices
-                              .songSearch(searchVal)
-                              .then((res: Response) => {
-                                console.log("res", res);
-                                return res.json();
-                              })
-                              .then((res: Response) =>
-                                setSongTable((res as any).tracks.items)
-                              );
-                          }
-                        }}
-                      >
-                        <input
-                          value={searchVal}
-                          onChange={(e) => setSearchVal(e.target.value)}
-                          type="text"
-                          placeholder="Search"
-                          className="input input-bordered"
-                        />
-                      </form>
-                    </div>
+            {/* <div className="flex-grow"> */}
+            <div className="">
+              <div className="flex-none gap-2"></div>
+            </div>
+            <div className="flex flex-row text-blue-200">
+              {/* <div className="flex flex-col w-[20%] mr-10 mt-10 relative min-h-[100%]"> */}
+              {/* </div> */}
+              <div className="flex flex-col">
+                <div className="flex">
+                  <div className="form-control ml-2 mt-2">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        console.log("search happening");
+                        if (apiServices) {
+                          apiServices
+                            .songSearch(searchVal)
+                            .then((res: Response) => {
+                              console.log("res", res);
+                              return res.json();
+                            })
+                            .then((res: Response) =>
+                              setSongTable((res as any).tracks.items)
+                            );
+                        }
+                      }}
+                    >
+                      <input
+                        value={searchVal}
+                        onChange={(e) => setSearchVal(e.target.value)}
+                        type="text"
+                        placeholder="Search"
+                        className="input input-bordered"
+                      />
+                    </form>
+                  </div>
 
-                    {/* <div className="dropdown dropdown-end">
+                  {/* <div className="dropdown dropdown-end">
                         <div
                           tabIndex={0}
                           role="button"
@@ -496,64 +496,66 @@ function App() {
                           </li>
                         </ul>
                       </div> */}
-                  </div>
+                </div>
 
-                  <div className="min-h-[80%] w-full">
-                    <div className="card card-side bg-base-100 shadow-xl">
-                      <table className="table-sm">
-                        {/* head */}
-                        <thead className="font-light">
-                          <tr>
-                            <th></th>
-                            <th className="font-light text-neutral-400">
-                              Title
-                            </th>
-                            <th className="font-light text-neutral-400">
-                              Artist
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* row 1 */}
+                <div className="min-h-[80%] w-full">
+                  <div className="card card-side">
+                    <table className="table-sm">
+                      {/* head */}
+                      {/* <div className="font-light">
+                        <tr>
+                          <th></th>
+                          <th className="font-light text-neutral-400">Title</th>
+                          <th className="font-light text-neutral-400">
+                            Artist
+                          </th>
+                        </tr>
+                      </div> */}
+                      <tbody>
+                        {/* row 1 */}
 
-                          {songTable.map((song) => (
-                            // <button>
-                            <tr className="text-neutral-300">
-                              <th>
-                                <button
-                                  onClick={() => {
-                                    transferPlaybackSong(song.uri);
-                                  }}
+                        {songTable.map((song) => (
+                          // <button>
+                          <div className="text-neutral-300 bg-base-300 my-4 rounded-full flex flex-row items-center">
+                            <th>
+                              <button
+                                onClick={() => {
+                                  transferPlaybackSong(song.uri);
+                                }}
+                              >
+                                <svg
+                                  className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full mt-1 ml-1"
+                                  aria-hidden="false"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
                                 >
-                                  <svg
-                                    className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                                    aria-hidden="false"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      stroke="currentColor"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M8 18V6l8 6-8 6Z"
-                                    />
-                                  </svg>
-                                </button>
-                              </th>
-                              <td>{song.name}</td>
-                              <td>
+                                  <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 18V6l8 6-8 6Z"
+                                  />
+                                </svg>
+                              </button>
+                            </th>
+                            <div>
+                              <td className=" text-slate-300 font-light">
+                                {song.name}
+                              </td>
+                              <td className="text-slate-400 font-light">
                                 {song.artists
                                   .map((artist) => (artist as any).name)
                                   .join(", ")}
                               </td>{" "}
-                            </tr>
-                            // </button>
-                          ))}
-                          {/* <tr>
+                            </div>
+                          </div>
+                          // </button>
+                        ))}
+                        {/* <tr>
                       <th>2</th>
                       <td>Hart Hagerty</td>
                       <td>Desktop Support Technician</td>
@@ -565,13 +567,13 @@ function App() {
                       <td>Tax Accountant</td>
                       <td>Red</td>
                     </tr> */}
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
+            {/* </div> */}
           </div>
           {/* {!is_active && (
             <div className="container">
