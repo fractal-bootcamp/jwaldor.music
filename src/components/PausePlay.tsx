@@ -44,8 +44,8 @@ export default function PausePlay({
   return (
     <>
       {/* <div className="flex flex-row justify-center mt-auto"> */}
-      <div className="">
-        <div className="flex flex-col justify-center w-full mt-auto">
+      <div className="flex justify-center mt-16 sm:mt-auto">
+        <div className="flex flex-col justify-center w-full md:max-w-[70%]">
           {/* <div className="card-body"></div> */}
           <motion.div
             // whileHover={{
@@ -55,7 +55,7 @@ export default function PausePlay({
             // }}
             animate={controls}
             id="player-info"
-            className="mb-3 w-24 self-center"
+            className="mb-3 w-24 self-center md:hidden"
           >
             {/* <div>
               <div
@@ -93,8 +93,9 @@ export default function PausePlay({
             </div>
             {/* <img id="album-art" src="" alt="Album Art" width="200px" /> */}
           </motion.div>
+          {/* <div className="relative flex justify-center min-w-max"> */}
           <div
-            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-300"
+            className="flex flex-row mb-3 justify-center  p-3 rounded-xl w-fill bg-base-300 relative md:h-44 items-center"
             onMouseEnter={() => {
               // setShowTitle(true);
               // animate(box, {
@@ -124,6 +125,16 @@ export default function PausePlay({
               // .then((res) => setShowTitle(false));
             }}
           >
+            {/* <img
+                className="hidden md:block w-20 h-20 absolute left-10"
+                id="album-art"
+                src={
+                  album_art
+                    ? album_art
+                    : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg"
+                }
+                alt="Album Art"
+              /> */}
             <div className="flex flex-col items-center w-1/2">
               <div className="mb-1">
                 <div id="track-name" className={"text-xs text-center"}>
@@ -135,6 +146,7 @@ export default function PausePlay({
                     : "Artist Name"}
                 </div>
               </div>
+              {/* <div className="flex flex-row relative justify-center"> */}
               <div className="flex flex-row w-full justify-center">
                 <button onClick={prevSong}>
                   <svg
@@ -207,6 +219,7 @@ export default function PausePlay({
                   </svg>
                 </button>
               </div>
+              {/* </div> */}
             </div>
             <button onClick={save_song}>
               <svg
@@ -214,13 +227,24 @@ export default function PausePlay({
                 width="24"
                 height="24"
                 fill="green"
-                className="bi bi-plus-circle-fill"
+                className="bi bi-plus-circle-fill absolute top-[43%] right-[15%]"
                 viewBox="0 0 16 16"
               >
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
               </svg>
             </button>
+            <img
+              className="hidden md:block w-28 h-28 absolute left-3 top-auto bottom-auto shadow-xl"
+              id="album-art"
+              src={
+                album_art
+                  ? album_art
+                  : "https://static.vecteezy.com/system/resources/previews/025/220/125/non_2x/picture-a-captivating-scene-of-a-tranquil-lake-at-sunset-ai-generative-photo.jpg"
+              }
+              alt="Album Art"
+            />
           </div>
+          {/* </div> */}
           {/* <div>
             <div id="track-name" className="text-sm text-center">
               Track Name
