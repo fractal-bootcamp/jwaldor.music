@@ -342,73 +342,69 @@ function App() {
           </li>
         </ul> */}
       {/* <div className="flex flex-row"> */}
+      {/* {(recList ? recList.length > 0 : false) && (
+        <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
+          <li className="menu-title font-light">
+            Recommendations based on recently saved
+          </li>
+
+          {(recList ? recList : []).map((item) => (
+            <li className="font-light">
+              <a>
+                <div>
+                  <button
+                    onClick={() => {
+                      transferPlaybackSong(item.uri);
+                    }}
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                      aria-hidden="false"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 18V6l8 6-8 6Z"
+                      />
+                    </svg>{" "}
+                    {item.name}
+                  </button>
+                </div>
+              </a>
+            </li>
+          ))}
+
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+          <li className="menu-title font-light">More</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+          <li className="menu-title font-light">More</li>
+          <li className="font-light">
+            <a>Higher Love</a>
+          </li>
+          <li className="font-light">
+            <a>Purple Lamborghini</a>
+          </li>
+        </ul>
+      )} */}
       <div className="flex flex-col min-h-screen">
         <div className="flex flex-row ">
-          <div className="flex flex-col">
-            <div className="">
-              <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg">
-                <a className="btn btn-ghost text-xl">Music</a>
-              </div>
-            </div>
-            {(recList ? recList.length > 0 : false) && (
-              <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-                <li className="menu-title font-light">
-                  Recommendations based on recently saved
-                </li>
-
-                {(recList ? recList : []).map((item) => (
-                  <li className="font-light">
-                    <a>
-                      <div>
-                        <button
-                          onClick={() => {
-                            transferPlaybackSong(item.uri);
-                          }}
-                        >
-                          <svg
-                            className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                            aria-hidden="false"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M8 18V6l8 6-8 6Z"
-                            />
-                          </svg>{" "}
-                          {item.name}
-                        </button>
-                      </div>
-                    </a>
-                  </li>
-                ))}
-
-                {/* <li className="font-light">
-                  <a>Purple Lamborghini</a>
-                </li>
-                <li className="menu-title font-light">More</li>
-                <li className="font-light">
-                  <a>Higher Love</a>
-                </li>
-                <li className="font-light">
-                  <a>Purple Lamborghini</a>
-                </li>
-                <li className="menu-title font-light">More</li>
-                <li className="font-light">
-                  <a>Higher Love</a>
-                </li>
-                <li className="font-light">
-                  <a>Purple Lamborghini</a>
-                </li> */}
-              </ul>
-            )}
-          </div>
+          {/* <div className="bg-gradient-to-r from-base-300 to-inherit shadow-lg pr-4 rounded-r-lg w-20"> */}
+          <a className="btn btn-ghost text-xl pr-1 pl-2">Music</a>
+          {/* </div> */}
 
           <div className="max-h-screen">
             {!accessToken && (
@@ -460,7 +456,7 @@ function App() {
                         onChange={(e) => setSearchVal(e.target.value)}
                         type="text"
                         placeholder="Search"
-                        className="input input-bordered"
+                        className="input input-bordered ml-2 mt-!"
                       />
                     </form>
                   </div>
@@ -498,7 +494,7 @@ function App() {
                       </div> */}
                 </div>
 
-                <div className="min-h-[80%] w-full">
+                <div className="min-h-[80%] w-full flex flex-col">
                   <div className="card card-side">
                     <table className="table-sm">
                       {/* head */}
@@ -513,10 +509,19 @@ function App() {
                       </div> */}
                       <tbody>
                         {/* row 1 */}
-
-                        {songTable.map((song) => (
+                        {/* <div className="text-neutral-300 bg-base-300 my-4 rounded-lg flex flex-row items-center h-12 w-28 pl-3">
+                          <div>Songs</div>
+                        </div> */}
+                        {/* <div className="bg-base-300"> */}
+                        <div className="card-body bg-base-100 text-slate-400 w-40 h-16 justify-center text-left mt-2">
+                          <h2 className="card-title">
+                            {recList ? "Recommended items" : "Top songs"}
+                          </h2>
+                        </div>
+                        {/* </div> */}
+                        {(recList ? recList : songTable).map((song) => (
                           // <button>
-                          <div className="text-neutral-300 bg-base-300 my-4 rounded-full flex flex-row items-center">
+                          <div className="text-neutral-300 bg-base-300 mb-4 rounded-full flex flex-row items-center">
                             <th>
                               <button
                                 onClick={() => {
