@@ -205,7 +205,7 @@ function App() {
           if (!state) {
             return;
           }
-          console.log("curr_state", player.getCurrentState(), state);
+          console.log("curr_state", state);
           // console.log("state", playerState.paused);
           setPlayerState(state);
         });
@@ -342,7 +342,7 @@ function App() {
           </li>
         </ul> */}
       {/* <div className="flex flex-row"> */}
-      <div className="flex flex-col">
+      <div className="flex flex-col min-h-screen">
         <div className="flex flex-row ">
           <div className="flex flex-col">
             <div className="">
@@ -350,45 +350,46 @@ function App() {
                 <a className="btn btn-ghost text-xl">Music</a>
               </div>
             </div>
-            <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
-              <li className="menu-title font-light">
-                Recommendations based on recently saved
-              </li>
-
-              {(recList ? recList : []).map((item) => (
-                <li className="font-light">
-                  <a>
-                    <div>
-                      <button
-                        onClick={() => {
-                          transferPlaybackSong(item.uri);
-                        }}
-                      >
-                        <svg
-                          className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
-                          aria-hidden="false"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M8 18V6l8 6-8 6Z"
-                          />
-                        </svg>{" "}
-                        {item.name}
-                      </button>
-                    </div>
-                  </a>
+            {(recList ? recList.length > 0 : false) && (
+              <ul className="menu max-h-sm pb-28 rounded-l-none rounded-br-none rounded-tr-lg bg-base-300 shadow-lg mt-3 bg-gradient-to-r from-base-300 to-transparent min-w-fit">
+                <li className="menu-title font-light">
+                  Recommendations based on recently saved
                 </li>
-              ))}
 
-              {/* <li className="font-light">
+                {(recList ? recList : []).map((item) => (
+                  <li className="font-light">
+                    <a>
+                      <div>
+                        <button
+                          onClick={() => {
+                            transferPlaybackSong(item.uri);
+                          }}
+                        >
+                          <svg
+                            className="w-6 h-6 text-gray-800 dark:text-white bg-green-800 rounded-full"
+                            aria-hidden="false"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M8 18V6l8 6-8 6Z"
+                            />
+                          </svg>{" "}
+                          {item.name}
+                        </button>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+
+                {/* <li className="font-light">
                   <a>Purple Lamborghini</a>
                 </li>
                 <li className="menu-title font-light">More</li>
@@ -405,7 +406,8 @@ function App() {
                 <li className="font-light">
                   <a>Purple Lamborghini</a>
                 </li> */}
-            </ul>
+              </ul>
+            )}
           </div>
 
           <div className="max-h-screen">
