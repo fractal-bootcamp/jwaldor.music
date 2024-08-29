@@ -528,7 +528,7 @@ function App() {
                       </div> */}
                   </div>
 
-                  <div className="min-h-[80%] w-full flex flex-col">
+                  <div className="min-h-[80%] w-full flex flex-col ">
                     <div className="card card-side">
                       <table className="table-sm">
                         {/* head */}
