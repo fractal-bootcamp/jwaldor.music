@@ -10,8 +10,6 @@ import {
 import { createContext, useContext } from "react";
 import { SpotifyServiceOptions } from "../../api";
 
-import "./App.css";
-
 export const AccessContext = createContext<{
   accessToken: string | undefined;
   setAccessToken: Dispatch<SetStateAction<string | undefined>>;
@@ -111,7 +109,11 @@ export const SpotifyProvider: FC<Props> = ({ children }) => {
   return (
     <>
       <AccessContext.Provider
-        value={{ accessToken, setAccessToken, SpotifyServices }}
+        value={{
+          accessToken: accessToken,
+          setAccessToken: setAccessToken,
+          SpotifyServices: SpotifyServices,
+        }}
       >
         {children}
       </AccessContext.Provider>

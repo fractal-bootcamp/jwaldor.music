@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 
 import PausePlay from "./components/PausePlay";
 // import WebPlayback from "./components/WebPlayerSpotify";
-import { SpotifyServices, SpotifyServiceOptions } from "./api";
+import { SpotifyServiceOptions } from "./api";
 import { MouseEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AccessContext } from "./components/helpers/SpotifyProvider";
 
 import "./App.css";
 
@@ -15,16 +17,18 @@ type TrackType = {
 };
 
 function App() {
-  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
+  const { accessToken, setAccessToken, SpotifyServices } =
+    useContext(AccessContext);
   const [player, setPlayer] = useState<undefined | Object>();
   const [currentsonginfo, setCurrentSongInfo] = useState<TrackType>();
   const [playerState, setPlayerState] = useState<undefined | Object>();
   const playerRef = useRef(undefined);
   const [pauseplay, setPP] = useState<"play" | "pause">("play");
   const [searchVal, setSearchVal] = useState("");
-  const [apiServices, setApiServices] = useState<
-    undefined | SpotifyServiceOptions
-  >(undefined);
+  // const [apiServices, setApiServices] = useState<
+  //   undefined | SpotifyServiceOptions
+  // >(undefined);
   const [songTable, setSongTable] = useState(Array<TrackType>);
   const [recList, setRecList] = useState<Array<TrackType>>();
   const [topItems, setTopItems] = useState(Array<TrackType>);
@@ -39,6 +43,8 @@ function App() {
 
   const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   const redirectUri = import.meta.env.VITE_REDIRECT_URI;
+
+  const apiServices = SpotifyServices;
 
   // function seekSong()
 
@@ -64,10 +70,10 @@ function App() {
     }
   }, [apiServices]);
 
-  useEffect(() => {
-    setApiServices(SpotifyServices(accessToken));
-    console.log("set Api services");
-  }, [accessToken]);
+  // useEffect(() => {
+  //   setApiServices(SpotifyServices(accessToken));
+  //   console.log("set Api services");
+  // }, [accessToken]);
 
   const save_song: MouseEventHandler<HTMLButtonElement> = () => {
     console.log("called");
