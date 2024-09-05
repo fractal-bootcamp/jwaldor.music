@@ -2,19 +2,34 @@ import { useState, useEffect, useRef } from "react";
 
 import PausePlay from "./components/PausePlay";
 // import WebPlayback from "./components/WebPlayerSpotify";
-import { SpotifyServiceOptions } from "./api";
 import { MouseEventHandler } from "react";
-import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AccessContext } from "./components/helpers/SpotifyProvider";
+import { SpotifyTrack } from './types'; // You'll need to create this type
+
+// Add this new type definition
+interface SpotifyPlayerState {
+  paused: boolean;
+  track_window: {
+    current_track: {
+      id: string;
+      name: string;
+      uri: string;
+      artists: Array<{ name: string }>;
+      album: {
+        images: Array<{ url: string }>;
+      };
+    };
+  };
+}
 
 import "./App.css";
 
-type TrackType = {
-  name: string | undefined;
-  artists: Array<{ name: string }> | undefined;
-  album_art: string | undefined;
-};
+
+// Update the TrackType interface
+interface TrackType extends SpotifyTrack {
+  album_art?: string;
+}
 
 function App() {
   // const [accessToken, setAccessToken] = useState("");
@@ -22,7 +37,7 @@ function App() {
     useContext(AccessContext);
   const [player, setPlayer] = useState<undefined | Object>();
   const [currentsonginfo, setCurrentSongInfo] = useState<TrackType>();
-  const [playerState, setPlayerState] = useState<undefined | Object>();
+  const [playerState, setPlayerState] = useState<SpotifyPlayerState | null>(null);
   const playerRef = useRef(undefined);
   const [pauseplay, setPP] = useState<"play" | "pause">("play");
   const [searchVal, setSearchVal] = useState("");
@@ -31,7 +46,7 @@ function App() {
   // >(undefined);
   const [songTable, setSongTable] = useState(Array<TrackType>);
   const [recList, setRecList] = useState<Array<TrackType>>();
-  const [topItems, setTopItems] = useState(Array<TrackType>);
+  // const [topItems, setTopItems] = useState(Array<TrackType>);
   const [recentlySaved, setRecentlySaved] = useState<Array<string>>([]);
   // const navigate = useNavigate();
 
@@ -55,12 +70,12 @@ function App() {
       console.log(apiServices.getTop);
       apiServices
         .getTop()
-        .then((res) => {
+        .then((res: Response) => {
           if (res.status === 401) {
             window.location.href = import.meta.env.VITE_REDIRECT_URI;
           }
         })
-        .catch((error) => console.log("error", error));
+        .catch((error: Error) => console.log("error", error));
       // .catch((error) => {
       //   console.log("error", error);
       //   // window.location.href = import.meta.env.VITE_REDIRECT_URI;
@@ -102,6 +117,8 @@ function App() {
         name: currentTrack.name,
         artists: currentTrack.artists,
         album_art: currentTrack.album.images[0].url,
+        id: currentTrack.id, // Added id
+        uri: currentTrack.uri, // Added uri
       });
       console.log("songSetup ");
     }
@@ -117,8 +134,8 @@ function App() {
         console.log("calling API");
         apiServices
           .getRecs(recentlySaved)
-          .then((res) => res.json())
-          .then((res) => {
+          .then((res: Response) => res.json())
+          .then((res: any) => {
             setRecList(res.tracks.slice(0, 5));
             setSongTable(res.tracks.slice(0, 5));
           });
@@ -143,9 +160,9 @@ function App() {
       console.log(apiServices.getTop);
       apiServices
         .getTop()
-        .then((res) => res.json())
-        .then((res) => {
-          setTopItems(res.items);
+        .then((res: Response) => res.json())
+        .then((res: any) => {
+          // setTopItems(res.items);
           setSongTable(res.items.slice(0, 5));
           console.log("set song table");
         });
@@ -238,7 +255,7 @@ function App() {
         );
 
         // Player state changed
-        player.addListener("player_state_changed", (state: Object) => {
+        player.addListener("player_state_changed", (state: SpotifyPlayerState) => {
           console.log("player state changed");
           if (!state) {
             return;
@@ -560,7 +577,7 @@ function App() {
                           </div>
                           {/* </div> */}
                           {songTable.length > 0 ? (
-                            songTable.map((song) => (
+                            songTable.map((song: any) => (
                               // <button>
                               <div className="text-neutral-300 bg-base-300 mb-4 rounded-full flex flex-row items-center">
                                 <th>
@@ -593,13 +610,12 @@ function App() {
                                     {song.name}
                                   </td>
                                   <td className="text-slate-400 font-light">
-                                    {song.artists
-                                      .map((artist) => (artist as any).name)
+                                    {song.artists && song.artists
+                                      .map((artist: any) => artist.name)
                                       .join(", ")}
                                   </td>{" "}
                                 </div>
                               </div>
-                              // </button>
                             ))
                           ) : (
                             <span className="loading loading-bars loading-md"></span>
