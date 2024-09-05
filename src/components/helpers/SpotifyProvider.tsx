@@ -1,13 +1,12 @@
 import {
   useState,
   useEffect,
-  useRef,
   FC,
   ReactNode,
   SetStateAction,
   Dispatch,
 } from "react";
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 import { SpotifyServiceOptions } from "../../api";
 
 export const AccessContext = createContext<{
@@ -30,7 +29,6 @@ export const SpotifyProvider: FC<Props> = ({ children }) => {
     undefined | SpotifyServiceOptions
   >(undefined);
 
-  const clientId = "2695e07f91b64a2bbc0e4551654a330a";
   // const redirectUri = import.meta.env.VITE_REDIRECT_URI;
 
   // function seekSong()
